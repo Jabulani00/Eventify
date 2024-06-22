@@ -1,0 +1,28 @@
+<ion-content class="ion-padding">
+  <div class="slider-container">
+    <div class="slider" #slider>
+      <div class="slider-content">
+        <div *ngFor="let slide of slides" class="slide" [style.background-image]="'url(' + slide.image + ')'">
+          <div class="slide-overlay">
+            <ion-icon [name]="slide.icon" size="large" class="slide-icon"></ion-icon>
+            <h2>{{ slide.title }}</h2>
+            <p>{{ slide.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-nav">
+      <span *ngFor="let slide of slides; let i = index" class="nav-dot" [class.active]="i === currentSlide"></span>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="footer-content">
+    <ion-button expand="block" class="get-in-btn" #getInBtn (click)="onGetIn()">Get In</ion-button>
+    <div #authOptions class="auth-options" style="display: none;">
+      <ion-button expand="block" class="sign-in-btn" (click)="navigateTo('login')">Sign In</ion-button>
+      <ion-button expand="block" class="sign-up-btn" (click)="navigateTo('signup')">Sign Up</ion-button>
+    </div>
+  </div>
+</ion-footer>
