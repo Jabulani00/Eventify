@@ -1,3 +1,5 @@
+<!-- welcome.page.html -->
+
 <ion-content class="ion-padding">
   <div class="slider-container">
     <div class="slider" #slider>
@@ -19,7 +21,7 @@
 
 <ion-footer class="ion-no-border">
   <div class="footer-content">
-    <ion-button expand="block" class="get-in-btn" #getInBtn (click)="onGetIn()">Get In</ion-button>
+    <ion-button expand="block" class="get-in-btn" (click)="onGetIn()" #getInBtn>Get In</ion-button>
     <div #authOptions class="auth-options" style="display: none;">
       <ion-button expand="block" class="sign-in-btn" (click)="navigateTo('login')">Sign In</ion-button>
       <ion-button expand="block" class="sign-up-btn" (click)="navigateTo('signup')">Sign Up</ion-button>

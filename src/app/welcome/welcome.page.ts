@@ -13,7 +13,7 @@ export class WelcomePage implements OnInit {
 
   slides = [
     {
-      image: 'assets/slide1.jpg',
+      image: 'assets/ent.jpg',
       icon: 'information-circle-outline',
       title: 'Welcome to Eventify',
       description: 'Eventify is your ultimate solution for managing and attending events seamlessly.',
@@ -57,14 +57,15 @@ export class WelcomePage implements OnInit {
   ];
 
   currentSlide = 0;
+  autoScrollInterval: any;
 
   constructor(private navCtrl: NavController) {}
 
   ngOnInit() {
     this.setupSlider();
+    this.startAutoScroll(); // Start auto-scrolling when the component initializes
   }
 
- 
   setupSlider() {
     const slider = this.slider.nativeElement;
     const dots = document.querySelectorAll('.nav-dot');
@@ -98,9 +99,27 @@ export class WelcomePage implements OnInit {
     });
   }
 
+  startAutoScroll() {
+    this.autoScrollInterval = setInterval(() => {
+      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+      this.scrollToSlide(this.currentSlide);
+    }, 5000); // Change slide every 5 seconds
+  }
+
+  stopAutoScroll() {
+    if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval);
+    }
+  }
+
   onGetIn() {
-    (this.getInBtn.nativeElement as HTMLElement).style.display = 'none';
-    (this.authOptions.nativeElement as HTMLElement).style.display = 'flex';
+    if (this.getInBtn && this.getInBtn.nativeElement) {
+      this.getInBtn.nativeElement.style.display = 'none';
+    }
+    if (this.authOptions && this.authOptions.nativeElement) {
+      this.authOptions.nativeElement.style.display = 'flex';
+    }
+    this.stopAutoScroll(); // Stop auto-scrolling when authentication options are shown
   }
 
   navigateTo(page: string) {
