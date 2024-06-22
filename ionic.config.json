@@ -1,0 +1,7 @@
+{
+  "name": "Eventify",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
