@@ -1,0 +1,25 @@
+Charts.js
+npm install chart.js chartjs-plugin-datalabels ngx-chartjs --save
+
+Firebase Specific Dependencies
+npm install firebase @angular/fire --save
+
+
+ Dependencies (Depending on Features)
+Google Maps Integration
+for tracking event location: 
+npm install @ionic-native/google-maps --save --legacy-peer-deps
+
+
+ Install the QR Code Generator Library
+ npm install qrcode --save
+
+QR Code Scanner
+For QR code scanning functionality:
+npm install @ionic-native/qr-scanner --save --legacy-peer-deps
+
+
+
+Social Sharing Integration
+For social media sharing functionality:
+npm install @ionic-native/social-sharing --save --legacy-peer-deps
