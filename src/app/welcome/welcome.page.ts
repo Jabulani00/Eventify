@@ -8,7 +8,6 @@ import { NavController } from '@ionic/angular';
 })
 export class WelcomePage implements OnInit {
   @ViewChild('slider', { static: true }) slider!: ElementRef;
-  @ViewChild('getInBtn', { static: true }) getInBtn!: ElementRef;
   @ViewChild('authOptions', { static: true }) authOptions!: ElementRef;
 
   slides = [
@@ -63,46 +62,27 @@ export class WelcomePage implements OnInit {
 
   ngOnInit() {
     this.setupSlider();
-    this.startAutoScroll(); // Start auto-scrolling when the component initializes
+    this.startAutoScroll();
   }
 
   setupSlider() {
     const slider = this.slider.nativeElement;
-    const dots = document.querySelectorAll('.nav-dot');
-
-    slider.addEventListener('scroll', () => {
-      const slideHeight = slider.children[0].offsetHeight;
-      this.currentSlide = Math.round(slider.scrollTop / slideHeight);
-      this.updateDots();
-    });
-
-    dots.forEach((dot, index) => {
-      (dot as HTMLElement).addEventListener('click', () => {
-        this.scrollToSlide(index);
-      });
+    slider.addEventListener('transitionend', () => {
+      this.updateActiveDot();
     });
   }
 
-  updateDots() {
+  updateActiveDot() {
     const dots = document.querySelectorAll('.nav-dot');
     dots.forEach((dot, index) => {
       (dot as HTMLElement).classList.toggle('active', index === this.currentSlide);
     });
   }
 
-  scrollToSlide(index: number) {
-    const slider = this.slider.nativeElement;
-    const slideHeight = slider.children[0].offsetHeight;
-    slider.scrollTo({
-      top: index * slideHeight,
-      behavior: 'smooth'
-    });
-  }
-
   startAutoScroll() {
     this.autoScrollInterval = setInterval(() => {
       this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-      this.scrollToSlide(this.currentSlide);
+      this.updateBackgroundSlider();
     }, 5000); // Change slide every 5 seconds
   }
 
@@ -112,17 +92,37 @@ export class WelcomePage implements OnInit {
     }
   }
 
-  onGetIn() {
-    if (this.getInBtn && this.getInBtn.nativeElement) {
-      this.getInBtn.nativeElement.style.display = 'none';
-    }
+  updateBackgroundSlider() {
+    const slider = this.slider.nativeElement;
+    slider.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+  }
+
+  scrollToSlide(index: number) {
+    this.stopAutoScroll(); // Stop auto-scrolling when manually changing slides
+    this.currentSlide = index;
+    this.updateBackgroundSlider();
+    this.startAutoScroll(); // Restart auto-scrolling after manual change
+  }
+
+  onGetStarted() {
+    this.stopAutoScroll(); // Stop auto-scrolling when showing auth options
     if (this.authOptions && this.authOptions.nativeElement) {
       this.authOptions.nativeElement.style.display = 'flex';
     }
-    this.stopAutoScroll(); // Stop auto-scrolling when authentication options are shown
+  }
+
+  onExploreFeatures() {
+    // Implement your explore features functionality here
+    // For example, you could scroll to a specific slide or open a modal
+    console.log('Explore features clicked');
   }
 
   navigateTo(page: string) {
     this.navCtrl.navigateForward(`/${page}`);
+  }
+
+  // Lifecycle hooks
+  ngOnDestroy() {
+    this.stopAutoScroll(); // Ensure interval is cleared when component is destroyed
   }
 }
