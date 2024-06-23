@@ -26,7 +26,22 @@ const routes: Routes = [
   {
     path: 'reset',
     loadChildren: () => import('./reset/reset.module').then(m => m.ResetPageModule)
+  },
+  {
+    path: 'attendee-tabs',
+    loadChildren: () => import('./attendee-tabs/attendee-tabs.module').then(m => m.AttendeeTabsPageModule)
+  },
+  {
+    path: 'host-tabs',
+    loadChildren: () => import('./host-tabs/host-tabs.module').then( m => m.HostTabsPageModule)
+  },
+  {
+    path: 'admin-tabs',
+    loadChildren: () => import('./admin-tabs/admin-tabs.module').then( m => m.AdminTabsPageModule)
   }
+ 
+ 
+ 
 ];
 
 @NgModule({
