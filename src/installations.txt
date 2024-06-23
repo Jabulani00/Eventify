@@ -23,3 +23,6 @@ npm install @ionic-native/qr-scanner --save --legacy-peer-deps
 Social Sharing Integration
 For social media sharing functionality:
 npm install @ionic-native/social-sharing --save --legacy-peer-deps
+
+
+npm install -g @angular/cli
