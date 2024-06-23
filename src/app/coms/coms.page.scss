@@ -1,0 +1,36 @@
+ion-content {
+    --background: #f4f4f4;
+  }
+  
+  ion-toolbar {
+    --background: #044a42;
+    --color: #ffffff;
+  }
+  
+  .message-item {
+    --background: #ffffff;
+    --border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-avatar {
+    --border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+  
+  ion-label h2 {
+    font-weight: bold;
+    color: #044a42;
+  }
+  
+  ion-note {
+    font-size: 0.8em;
+    color: #888;
+  }
+  
+  ion-fab-button {
+    --background: #044a42;
+    --color: #ffffff;
+  }

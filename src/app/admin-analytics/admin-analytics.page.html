@@ -1,13 +1,46 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>adminAnalytics</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Event Analytics</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">adminAnalytics</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Event Attendance</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #attendanceChart></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Event Types</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #eventTypeChart></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content>
+            <h2>Total Events</h2>
+            <p>124</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content>
+            <h2>Total Attendees</h2>
+            <p>3,567</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
