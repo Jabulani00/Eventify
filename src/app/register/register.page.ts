@@ -27,7 +27,10 @@ export class RegisterPage implements OnInit {
       role: ['', Validators.required],
       gender: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      membershipID: ['', Validators.required]
+      membershipID: ['', Validators.required],
+      address: ['', Validators.required], // New field
+      maritalStatus: ['', Validators.required], // New field
+      terms: [false, Validators.requiredTrue] // Checkbox for Terms and Conditions
     });
   }
 
@@ -35,7 +38,7 @@ export class RegisterPage implements OnInit {
 
   async onRegister() {
     if (this.registerForm.valid) {
-      const { email, password, fullName, role, gender, phoneNumber, membershipID } = this.registerForm.value;
+      const { email, password, fullName, role, gender, phoneNumber, membershipID, address, maritalStatus } = this.registerForm.value;
       try {
         const userCredential = await this.authService.register(email, password);
         const uid = userCredential.user?.uid;
@@ -48,6 +51,8 @@ export class RegisterPage implements OnInit {
           gender,
           phoneNumber,
           membershipID,
+          address,
+          maritalStatus,
           status: 'Pending' // Default status
         };
 
@@ -58,6 +63,8 @@ export class RegisterPage implements OnInit {
         console.error('Registration error:', error);
         this.showToast('Registration failed. Please try again.');
       }
+    } else {
+      this.showToast('Please fill out all required fields and agree to the Terms and Conditions.');
     }
   }
 

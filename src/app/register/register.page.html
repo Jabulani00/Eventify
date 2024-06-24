@@ -49,6 +49,28 @@
       <ion-input formControlName="membershipID" type="text"></ion-input>
     </ion-item>
 
+    <!-- New Fields -->
+    <ion-item>
+      <ion-label position="floating">Address</ion-label>
+      <ion-input formControlName="address" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Marital Status</ion-label>
+      <ion-select formControlName="maritalStatus">
+        <ion-select-option value="Single">Single</ion-select-option>
+        <ion-select-option value="Married">Married</ion-select-option>
+        <ion-select-option value="Divorced">Divorced</ion-select-option>
+        <ion-select-option value="Widowed">Widowed</ion-select-option>
+        <ion-select-option value="Other">Other</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-checkbox formControlName="terms" slot="start"></ion-checkbox>
+      <ion-label>I agree to the Terms and Conditions</ion-label>
+    </ion-item>
+
     <ion-button expand="full" type="submit" [disabled]="!registerForm.valid" class="register-button">Register</ion-button>
   </form>
 </ion-content>
