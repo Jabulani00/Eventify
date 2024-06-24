@@ -10,7 +10,7 @@ export interface User {
   profilePictureURL?: string;
   status: string;
   role: string;
- 
+  countActivity?: number; // Add countActivity property if it's part of your data
 }
 
 
@@ -24,6 +24,8 @@ export class RoleManagerPage implements OnInit {
   filteredUsers: any[] = [];
   selectedRole: string = 'All';
   selectedStatus: string = 'All';
+  maxActivity: number = 0;
+  
 
   constructor(private firestore: AngularFirestore) {}
 
@@ -33,6 +35,7 @@ export class RoleManagerPage implements OnInit {
       this.filteredUsers = data;
       this.filterUsers(); // Initial filter users
       this.calculateStats(); // Calculate stats initially
+      this.updateMaxActivity(); // Update maxActivity initially
     });
   }
 
@@ -200,9 +203,23 @@ export class RoleManagerPage implements OnInit {
     return this.users.filter(user => user.status === status).length;
   }
 
-  getMostActiveUsers(): any[] {
-    // Implement logic to return the most active users
-    // For example:
-    return this.users.filter(user => user.countActivity > 0);
+  updateMaxActivity() {
+    this.maxActivity = Math.max(1, ...this.users.map(user => user.countActivity ?? 0));
   }
+
+  sortUsersByActivity() {
+    this.filteredUsers.sort((a, b) => (b.countActivity ?? 0) - (a.countActivity ?? 0));
+  }
+  
+
+  getMostActiveUser(): User | undefined {
+    if (this.users.length === 0) return undefined;
+  
+    return this.users.reduce((mostActive, current) =>
+      (current.countActivity ?? 0) > (mostActive.countActivity ?? 0) ? current : mostActive
+    );
+  }
+  
+  
+  
 }

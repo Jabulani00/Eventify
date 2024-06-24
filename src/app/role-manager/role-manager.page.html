@@ -107,25 +107,28 @@
         </ion-list>
       </div>
 
-      <!-- Active users -->
-      <div class="active-users">
-        <h2>Most Active Users</h2>
-        <ion-list>
-          <ion-item *ngFor="let user of getMostActiveUsers(); let i = index" class="active-user-item">
-            <ion-avatar slot="start">
-              <img [src]="user.profilePictureURL" />
-            </ion-avatar>
-            <ion-label>
-              <h2>{{ user.fullName }}</h2>
-              <p>{{ user.role }}</p>
-            </ion-label>
-            <div class="activity-score">
-              <ion-progress-bar [value]="user.countActivity / 100"></ion-progress-bar>
-              <span>{{ user.countActivity }}</span>
-            </div>
-          </ion-item>
-        </ion-list>
+ <!-- Active users -->
+ <div class="active-users">
+  <h2>User Activity</h2>
+  <ion-list>
+    <ion-item *ngFor="let user of filteredUsers; let i = index" class="active-user-item">
+      <ion-avatar slot="start">
+        <img [src]="user.profilePictureURL || 'default-profile-url.jpg'" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ user.fullName }}</h2>
+        <p>{{ user.role }}</p>
+      </ion-label>
+      <div class="activity-score">
+        <ion-progress-bar [value]="(user.countActivity ?? 0) / maxActivity"></ion-progress-bar>
+        <span>{{ user.countActivity ?? 0 }}</span>
       </div>
-    </div>
-  </div>
+      <ion-badge *ngIf="i === 0" color="primary">Top User</ion-badge>
+    </ion-item>
+  </ion-list>
+</div>
+
+  
+</div>
+</div>
 </ion-content>
