@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-interface User {
-  id: number;
-  name: string;
+
+
+export interface User {
+  uid: string;
+  fullName: string;
   email: string;
-  role: 'Super Admin' | 'Host Admin';
-  status: 'Pending' | 'Approved' | 'Suspended' | 'Active';
-  activityScore: number;
+  profilePictureURL?: string;
+  status: string;
+  role: string;
+ 
 }
+
 
 @Component({
   selector: 'app-role-manager',
@@ -15,82 +20,189 @@ interface User {
   styleUrls: ['./role-manager.page.scss'],
 })
 export class RoleManagerPage implements OnInit {
-  users: User[] = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Super Admin', status: 'Active', activityScore: 95 },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Host Admin', status: 'Pending', activityScore: 0 },
-    { id: 3, name: 'Alice Johnson', email: 'alice@example.com', role: 'Host Admin', status: 'Approved', activityScore: 78 },
-    { id: 4, name: 'Bob Williams', email: 'bob@example.com', role: 'Super Admin', status: 'Suspended', activityScore: 30 },
-    { id: 5, name: 'Charlie Brown', email: 'charlie@example.com', role: 'Host Admin', status: 'Active', activityScore: 88 },
-  ];
-
-  filteredUsers: User[] = [];
+  users: any[] = [];
+  filteredUsers: any[] = [];
   selectedRole: string = 'All';
   selectedStatus: string = 'All';
 
-  activeUsersCount: number = 0;
-  pendingUsersCount: number = 0;
-  suspendedUsersCount: number = 0;
-
-  constructor() { }
+  constructor(private firestore: AngularFirestore) {}
 
   ngOnInit() {
-    this.filterUsers();
-    this.updateUserCounts();
-  }
-  updateUserCounts() {
-    this.activeUsersCount = this.users.filter(u => u.status === 'Active').length;
-    this.pendingUsersCount = this.users.filter(u => u.status === 'Pending').length;
-    this.suspendedUsersCount = this.users.filter(u => u.status === 'Suspended').length;
+    this.firestore.collection('users').valueChanges().subscribe((data: any[]) => {
+      this.users = data;
+      this.filteredUsers = data;
+      this.filterUsers(); // Initial filter users
+      this.calculateStats(); // Calculate stats initially
+    });
   }
 
   filterUsers() {
-    this.filteredUsers = this.users.filter(user => 
-      (this.selectedRole === 'All' || user.role === this.selectedRole) &&
-      (this.selectedStatus === 'All' || user.status === this.selectedStatus)
-    );
+    this.filteredUsers = this.users.filter(user => {
+      return (this.selectedRole === 'All' || user.role === this.selectedRole) &&
+             (this.selectedStatus === 'All' || user.status === this.selectedStatus);
+    });
   }
 
+  calculateStats() {
+    // Calculate stats based on the filteredUsers list
+    // For example:
+    // Count users with specific statuses
+    const pendingCount = this.countUsersWithStatus('Pending');
+    const activeCount = this.countUsersWithStatus('Active');
+    const suspendedCount = this.countUsersWithStatus('Suspended');
+
+    console.log('Pending:', pendingCount, 'Active:', activeCount, 'Suspended:', suspendedCount);
+  }
 
   getBadgeColor(status: string): string {
-    switch(status) {
-      case 'Active': return 'success';
-      case 'Pending': return 'warning';
-      case 'Suspended': return 'danger';
-      case 'Approved': return 'primary';
-      default: return 'medium';
+    switch (status) {
+      case 'Pending':
+        return 'warning';
+      case 'Approved':
+      case 'Active':
+        return 'success';
+      case 'Suspended':
+        return 'danger';
+      default:
+        return 'medium';
     }
   }
 
   approveUser(user: User) {
-    user.status = 'Approved';
-    this.filterUsers();
-    this.updateUserCounts();
+    const usersRef = this.firestore.collection('users', ref =>
+      ref.where('email', '==', user.email)
+    );
+  
+    usersRef.get().toPromise().then(querySnapshot => {
+      if (querySnapshot && !querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id;
+        const userDocRef = this.firestore.collection('users').doc(docId);
+  
+        userDocRef.update({ status: 'Active' })
+          .then(() => {
+            console.log('User approved successfully');
+            // Update status locally
+            user.status = 'Active';
+  
+            // Reapply filters and recalculate stats
+            this.filterUsers();
+            this.calculateStats();
+          })
+          .catch(error => {
+            console.error('Error updating user:', error);
+          });
+      } else {
+        console.error('User document with the provided email does not exist');
+      }
+    }).catch(error => {
+      console.error('Error fetching user document:', error);
+    });
   }
-
+  
   declineUser(user: User) {
-    const index = this.users.findIndex(u => u.id === user.id);
-    if (index !== -1) {
-      this.users.splice(index, 1);
-      this.filterUsers();
-      this.updateUserCounts();
-    }
+    const usersRef = this.firestore.collection('users', ref =>
+      ref.where('email', '==', user.email)
+    );
+  
+    usersRef.get().toPromise().then(querySnapshot => {
+      if (querySnapshot && !querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id;
+        const userDocRef = this.firestore.collection('users').doc(docId);
+  
+        userDocRef.update({ status: 'Denied' })
+          .then(() => {
+            console.log('User declined successfully');
+            // Update status locally
+            user.status = 'Denied';
+  
+            // Reapply filters and recalculate stats
+            this.filterUsers();
+            this.calculateStats();
+          })
+          .catch(error => {
+            console.error('Error updating user:', error);
+          });
+      } else {
+        console.error('User document with the provided email does not exist');
+      }
+    }).catch(error => {
+      console.error('Error fetching user document:', error);
+    });
   }
-
+  
+ 
+  
+ 
   suspendUser(user: User) {
-    user.status = 'Suspended';
-    this.filterUsers();
-    this.updateUserCounts();
+    const usersRef = this.firestore.collection('users', ref =>
+      ref.where('email', '==', user.email)
+    );
+  
+    usersRef.get().toPromise().then(querySnapshot => {
+      if (querySnapshot && !querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id;
+        const userDocRef = this.firestore.collection('users').doc(docId);
+  
+        userDocRef.update({ status: 'Suspended' })
+          .then(() => {
+            console.log('User approved successfully');
+            // Update status locally
+            user.status = 'Suspended';
+  
+            // Reapply filters and recalculate stats
+            this.filterUsers();
+            this.calculateStats();
+          })
+          .catch(error => {
+            console.error('Error updating user:', error);
+          });
+      } else {
+        console.error('User document with the provided email does not exist');
+      }
+    }).catch(error => {
+      console.error('Error fetching user document:', error);
+    });
   }
+  
 
   activateUser(user: User) {
-    user.status = 'Active';
-    this.filterUsers();
-    this.updateUserCounts();
+    const usersRef = this.firestore.collection('users', ref =>
+      ref.where('email', '==', user.email)
+    );
+  
+    usersRef.get().toPromise().then(querySnapshot => {
+      if (querySnapshot && !querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id;
+        const userDocRef = this.firestore.collection('users').doc(docId);
+  
+        userDocRef.update({ status: 'Active' })
+          .then(() => {
+            console.log('User approved successfully');
+            // Update status locally
+            user.status = 'Active';
+  
+            // Reapply filters and recalculate stats
+            this.filterUsers();
+            this.calculateStats();
+          })
+          .catch(error => {
+            console.error('Error updating user:', error);
+          });
+      } else {
+        console.error('User document with the provided email does not exist');
+      }
+    }).catch(error => {
+      console.error('Error fetching user document:', error);
+    });
   }
 
-  getMostActiveUsers(): User[] {
-    return [...this.users]
-      .sort((a, b) => b.activityScore - a.activityScore)
-      .slice(0, 5);
+  countUsersWithStatus(status: string): number {
+    return this.users.filter(user => user.status === status).length;
+  }
+
+  getMostActiveUsers(): any[] {
+    // Implement logic to return the most active users
+    // For example:
+    return this.users.filter(user => user.countActivity > 0);
   }
 }
