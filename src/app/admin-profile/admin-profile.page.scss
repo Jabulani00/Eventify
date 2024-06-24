@@ -14,7 +14,7 @@
       border-radius: 50%;
       overflow: hidden;
       margin-right: 2rem;
-      border: 4px solid var(--ion-color-primary);
+      border: 4px solid  #044a42;
       
       img {
         width: 100%;
@@ -43,7 +43,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     
     ion-card-header {
-      background-color: var(--ion-color-primary);
+      background-color: #044a42;
       
       ion-card-title {
         color: var(--ion-color-light);
@@ -60,7 +60,7 @@
     .stat-item {
       ion-icon {
         font-size: 2.5rem;
-        color: var(--ion-color-primary);
+        color:  #044a42;
       }
       
       h2 {
@@ -71,7 +71,7 @@
       }
       
       p {
-        color: var(--ion-color-medium);
+        color:  #044a42;
       }
     }
   }

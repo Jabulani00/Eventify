@@ -43,3 +43,47 @@ ion-header{
         font-weight: bold;
     }
 }
+
+/* Global IonTabButton styles */
+ion-tab-button {
+    --color-selected: #ffffff; /* Active tab text color */
+    --color: rgba(255, 255, 255, 0.7); /* Inactive tab text color */
+    --background-focused: #044a42; /* Focused tab background color */
+    --background: #044a42; /* Tab background color */
+    --padding-bottom: 6px; /* Bottom padding */
+    --padding-top: 6px; /* Top padding */
+    --padding-start: 12px; /* Left/right padding */
+    --padding-end: 12px; /* Left/right padding */
+    --border-radius: 12px; /* Border radius */
+    --icon-height: 24px; /* Icon height */
+    --icon-width: 24px; /* Icon width */
+    --color-disabled: #808080; /* Disabled tab text color */
+    --color-hover: #ffffff; /* Tab hover text color */
+    --color-focused: #ffffff; /* Tab focused text color */
+    --background-selected: #044a42; /* Selected tab background color */
+    --color-activated: #ffffff; /* Activated tab text color */
+    --ripple-color: #ffffff; /* Ripple color */
+    --ripple-effect-size: 12px; /* Ripple effect size */
+    --padding-bottom-focused: 8px; /* Focused tab bottom padding */
+    --padding-top-focused: 8px; /* Focused tab top padding */
+    --padding-start-focused: 16px; /* Focused tab left/right padding */
+    --padding-end-focused: 16px; /* Focused tab left/right padding */
+    --font-weight: 500; /* Tab label font weight */
+    --font-size: 14px; /* Tab label font size */
+    --tab-max-width: none; /* Tab max width */
+    --min-height: auto; /* Tab min height */
+    --width: auto; /* Tab width */
+  }
+  
+  /* Add scroll for tabs container */
+  ion-tab-bar {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  .ion-tab-bar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  
