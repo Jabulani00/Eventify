@@ -84,7 +84,7 @@
               <img [src]="user.profilePictureURL" />
             </ion-avatar>
             <ion-label>
-              <h2>{{ user.fullName }}</h2>
+              <h2 (click)="openUserModal(user)" class="user-name">{{ user.fullName }}</h2>
               <p>{{ user.email }}</p>
               <ion-badge [color]="getBadgeColor(user.status)">{{ user.status }}</ion-badge>
               <ion-badge color="medium">{{ user.role }}</ion-badge>
@@ -107,25 +107,108 @@
         </ion-list>
       </div>
 
-      <!-- Active users -->
-      <div class="active-users">
-        <h2>Most Active Users</h2>
-        <ion-list>
-          <ion-item *ngFor="let user of getMostActiveUsers(); let i = index" class="active-user-item">
-            <ion-avatar slot="start">
-              <img [src]="user.profilePictureURL" />
-            </ion-avatar>
-            <ion-label>
-              <h2>{{ user.fullName }}</h2>
-              <p>{{ user.role }}</p>
-            </ion-label>
-            <div class="activity-score">
-              <ion-progress-bar [value]="user.countActivity / 100"></ion-progress-bar>
-              <span>{{ user.countActivity }}</span>
+      <ion-modal #userModal>
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>User Profile</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="userModal.dismiss()">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <div class="user-profile" *ngIf="selectedUser">
+              <ion-avatar>
+                <img [src]="selectedUser.profilePictureURL || 'assets/default-avatar.png'" alt="User Avatar"/>
+              </ion-avatar>
+              <h2>{{ selectedUser.fullName }}</h2>
+              <div class="membership-info">
+                <p><strong>Membership ID:</strong> {{ selectedUser.membershipID }}</p>
+                <p><strong>Joined:</strong> {{ selectedUser.joinDate | date:'mediumDate' }}</p>
+              </div>
+              <div class="badge-container">
+                <ion-badge [color]="getBadgeColor(selectedUser.status)">{{ selectedUser.status }}</ion-badge>
+                <ion-badge color="medium">{{ selectedUser.role }}</ion-badge>
+              </div>
+              <p *ngIf="selectedUser.isTopUser" class="top-user-badge">Top User</p>
             </div>
-          </ion-item>
-        </ion-list>
+            <ion-list lines="full" *ngIf="selectedUser">
+              <ion-item>
+                <ion-label>
+                  <h3>Email</h3>
+                  <p>{{ selectedUser.email }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Phone Number</h3>
+                  <p>{{ selectedUser.phoneNumber }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Gender</h3>
+                  <p>{{ selectedUser.gender }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Marital Status</h3>
+                  <p>{{ selectedUser.maritalStatus }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Activity Score</h3>
+                  <p>{{ selectedUser.countActivity || 0 }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="action-buttons" *ngIf="selectedUser">
+              <ion-button *ngIf="selectedUser.status === 'Pending'" (click)="approveUser(selectedUser)" fill="clear" color="success">
+                Approve Account
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="selectedUser.status === 'Pending'" (click)="declineUser(selectedUser)" fill="clear" color="danger">
+                Decline  account
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="selectedUser.status === 'Active'" (click)="suspendUser(selectedUser)" fill="clear" color="warning">
+                Suspend account
+                <ion-icon name="ban"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="selectedUser.status === 'Suspended'" (click)="activateUser(selectedUser)" fill="clear" color="success">
+                Activate account
+                <ion-icon name="refresh-circle"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+ <!-- Active users -->
+ <div class="active-users">
+  <h2>User Activity</h2>
+  <ion-list>
+    <ion-item *ngFor="let user of filteredUsers; let i = index" class="active-user-item">
+      <ion-avatar slot="start">
+        <img [src]="user.profilePictureURL || 'default-profile-url.jpg'" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ user.fullName }}</h2>
+        <p>{{ user.role }}</p>
+      </ion-label>
+      <div class="activity-score">
+        <ion-progress-bar [value]="(user.countActivity ?? 0) / maxActivity"></ion-progress-bar>
+        <span>{{ user.countActivity ?? 0 }}</span>
       </div>
-    </div>
-  </div>
+      <ion-badge *ngIf="i === 0 && filteredUsers[0].countActivity === user.countActivity" color="primary">Most Active</ion-badge>
+    </ion-item>
+  </ion-list>
+</div>
+
+
+  
+</div>
+</div>
 </ion-content>

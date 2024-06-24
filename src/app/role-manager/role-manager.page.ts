@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonModal } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-
-
 export interface User {
+  membershipID: string;
+  joinDate: string;
+  gender: string;
+  maritalStatus: string;
+  phoneNumber: string;
   uid: string;
   fullName: string;
   email: string;
   profilePictureURL?: string;
   status: string;
   role: string;
- 
+  countActivity?: number;
+  isTopUser?: boolean; // Add isTopUser property
 }
 
 
@@ -20,19 +25,25 @@ export interface User {
   styleUrls: ['./role-manager.page.scss'],
 })
 export class RoleManagerPage implements OnInit {
-  users: any[] = [];
-  filteredUsers: any[] = [];
+
+  @ViewChild('userModal') userModal!: IonModal;
+  selectedUser: User | null = null;
+
+  users: User[] = [];
+  filteredUsers: User[] = [];
   selectedRole: string = 'All';
   selectedStatus: string = 'All';
+  maxActivity: number = 0;
+  
 
   constructor(private firestore: AngularFirestore) {}
 
   ngOnInit() {
     this.firestore.collection('users').valueChanges().subscribe((data: any[]) => {
-      this.users = data;
-      this.filteredUsers = data;
-      this.filterUsers(); // Initial filter users
-      this.calculateStats(); // Calculate stats initially
+      this.users = data as User[];
+      this.filterUsers(); // Update filteredUsers whenever users change
+      this.calculateStats();
+      this.updateMaxActivity();
     });
   }
 
@@ -41,6 +52,13 @@ export class RoleManagerPage implements OnInit {
       return (this.selectedRole === 'All' || user.role === this.selectedRole) &&
              (this.selectedStatus === 'All' || user.status === this.selectedStatus);
     });
+    this.sortUsersByActivity(); // Ensure filteredUsers is always sorted after filtering
+    this.updateTopUser(); // Update top user after filtering
+  }
+
+  openUserModal(user: User) {
+    this.selectedUser = user;
+    this.userModal.present();
   }
 
   calculateStats() {
@@ -54,7 +72,7 @@ export class RoleManagerPage implements OnInit {
     console.log('Pending:', pendingCount, 'Active:', activeCount, 'Suspended:', suspendedCount);
   }
 
-  getBadgeColor(status: string): string {
+  getBadgeColor(status: string | undefined): string {
     switch (status) {
       case 'Pending':
         return 'warning';
@@ -72,18 +90,21 @@ export class RoleManagerPage implements OnInit {
     const usersRef = this.firestore.collection('users', ref =>
       ref.where('email', '==', user.email)
     );
-  
+
     usersRef.get().toPromise().then(querySnapshot => {
       if (querySnapshot && !querySnapshot.empty) {
         const docId = querySnapshot.docs[0].id;
         const userDocRef = this.firestore.collection('users').doc(docId);
-  
+
         userDocRef.update({ status: 'Active' })
           .then(() => {
             console.log('User approved successfully');
             // Update status locally
             user.status = 'Active';
-  
+            // Update countActivity if applicable
+            if (user.countActivity) {
+              user.countActivity++; // Example: Increment activity count
+            }
             // Reapply filters and recalculate stats
             this.filterUsers();
             this.calculateStats();
@@ -98,23 +119,22 @@ export class RoleManagerPage implements OnInit {
       console.error('Error fetching user document:', error);
     });
   }
-  
+
   declineUser(user: User) {
     const usersRef = this.firestore.collection('users', ref =>
       ref.where('email', '==', user.email)
     );
-  
+
     usersRef.get().toPromise().then(querySnapshot => {
       if (querySnapshot && !querySnapshot.empty) {
         const docId = querySnapshot.docs[0].id;
         const userDocRef = this.firestore.collection('users').doc(docId);
-  
+
         userDocRef.update({ status: 'Denied' })
           .then(() => {
             console.log('User declined successfully');
             // Update status locally
             user.status = 'Denied';
-  
             // Reapply filters and recalculate stats
             this.filterUsers();
             this.calculateStats();
@@ -129,26 +149,22 @@ export class RoleManagerPage implements OnInit {
       console.error('Error fetching user document:', error);
     });
   }
-  
- 
-  
- 
+
   suspendUser(user: User) {
     const usersRef = this.firestore.collection('users', ref =>
       ref.where('email', '==', user.email)
     );
-  
+
     usersRef.get().toPromise().then(querySnapshot => {
       if (querySnapshot && !querySnapshot.empty) {
         const docId = querySnapshot.docs[0].id;
         const userDocRef = this.firestore.collection('users').doc(docId);
-  
+
         userDocRef.update({ status: 'Suspended' })
           .then(() => {
-            console.log('User approved successfully');
+            console.log('User suspended successfully');
             // Update status locally
             user.status = 'Suspended';
-  
             // Reapply filters and recalculate stats
             this.filterUsers();
             this.calculateStats();
@@ -163,24 +179,26 @@ export class RoleManagerPage implements OnInit {
       console.error('Error fetching user document:', error);
     });
   }
-  
 
   activateUser(user: User) {
     const usersRef = this.firestore.collection('users', ref =>
       ref.where('email', '==', user.email)
     );
-  
+
     usersRef.get().toPromise().then(querySnapshot => {
       if (querySnapshot && !querySnapshot.empty) {
         const docId = querySnapshot.docs[0].id;
         const userDocRef = this.firestore.collection('users').doc(docId);
-  
+
         userDocRef.update({ status: 'Active' })
           .then(() => {
-            console.log('User approved successfully');
+            console.log('User activated successfully');
             // Update status locally
             user.status = 'Active';
-  
+            // Update countActivity if applicable
+            if (user.countActivity) {
+              user.countActivity++; // Example: Increment activity count
+            }
             // Reapply filters and recalculate stats
             this.filterUsers();
             this.calculateStats();
@@ -200,9 +218,32 @@ export class RoleManagerPage implements OnInit {
     return this.users.filter(user => user.status === status).length;
   }
 
-  getMostActiveUsers(): any[] {
-    // Implement logic to return the most active users
-    // For example:
-    return this.users.filter(user => user.countActivity > 0);
+  updateTopUser() {
+    if (this.filteredUsers.length === 0) return;
+  
+    // Sort users to ensure top user is correctly identified
+    this.sortUsersByActivity();
+  
+    // Check if the first user is still the top user
+    const currentTopUser = this.filteredUsers[0];
+    this.filteredUsers.forEach(user => {
+      user.isTopUser = user === currentTopUser;
+    });
+  }
+  
+
+  updateUserActivity(user: User, newActivity: number) {
+    user.countActivity = newActivity;
+    this.updateTopUser();
+    this.sortUsersByActivity();
+    this.updateMaxActivity();
+  }
+
+  sortUsersByActivity() {
+    this.filteredUsers.sort((a, b) => (b.countActivity ?? 0) - (a.countActivity ?? 0));
+  }
+
+  updateMaxActivity() {
+    this.maxActivity = Math.max(1, ...this.users.map(user => user.countActivity ?? 0));
   }
 }

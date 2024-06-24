@@ -200,3 +200,108 @@ ion-content {
       }
     }
   }
+
+
+
+  ion-modal {
+    --background: #f4f5f8;
+  
+    ion-content {
+      --background: #f4f5f8;
+    }
+  
+    .user-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+  
+      ion-avatar {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 15px;
+      }
+  
+      h2 {
+        margin: 10px 0;
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #333;
+      }
+  
+      .membership-info {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 10px 0;
+  
+        p {
+          margin: 0 10px;
+          font-size: 0.9em;
+          color: #666;
+  
+          strong {
+            color: #333;
+          }
+        }
+      }
+  
+      ion-badge {
+        margin: 5px;
+        padding: 8px 12px;
+        border-radius: 15px;
+      }
+      .badge-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+  
+      .top-user-badge {
+        background-color: #ffd700;
+        color: #000;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+    }
+  
+    ion-list {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      ion-item {
+        --padding-start: 16px;
+        --padding-end: 16px;
+        --inner-padding-end: 0;
+  
+        ion-label {
+          h3 {
+            font-size: 1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+          }
+  
+          p {
+            font-size: 0.9em;
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+  
+  .user-name {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--ion-color-primary);
+  }
