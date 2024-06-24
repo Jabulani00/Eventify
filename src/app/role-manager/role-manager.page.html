@@ -127,8 +127,10 @@
                 <p><strong>Membership ID:</strong> {{ selectedUser.membershipID }}</p>
                 <p><strong>Joined:</strong> {{ selectedUser.joinDate | date:'mediumDate' }}</p>
               </div>
-              <ion-badge slot="start" [color]="getBadgeColor(selectedUser.status)">{{ selectedUser.status }}</ion-badge>
-              <ion-badge slot="end" color="medium">{{ selectedUser.role }}</ion-badge>
+              <div class="badge-container">
+                <ion-badge [color]="getBadgeColor(selectedUser.status)">{{ selectedUser.status }}</ion-badge>
+                <ion-badge color="medium">{{ selectedUser.role }}</ion-badge>
+              </div>
               <p *ngIf="selectedUser.isTopUser" class="top-user-badge">Top User</p>
             </div>
             <ion-list lines="full" *ngIf="selectedUser">
