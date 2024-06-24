@@ -27,6 +27,11 @@ export class ProfilePage implements OnInit {
     this.getAdminProfile();
   }
 
+  openLink(url: string) {
+    window.open(url, '_blank');
+  }
+  
+
   getAdminProfile() {
     this.afAuth.authState.subscribe(user => {
       if (user) {

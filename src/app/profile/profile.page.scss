@@ -2,6 +2,19 @@
     max-width: 800px;
     margin: 0 auto;
   }
+
+  /* Add this to the component's CSS file */
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.social-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
   
   .profile-header {
     display: flex;

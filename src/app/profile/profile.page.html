@@ -15,11 +15,11 @@
         <h1>{{ admin.name }}</h1>
         <p>{{ admin.role }}</p>
         <p>Bio: {{ admin.bio }}</p>
-        <div *ngIf="admin.facebook || admin.instagram || admin.twitter || admin.tiktok">
-          <p *ngIf="admin.facebook">Facebook: <a [href]="admin.facebook" target="_blank">{{ admin.facebook }}</a></p>
-          <p *ngIf="admin.instagram">Instagram: <a [href]="admin.instagram" target="_blank">{{ admin.instagram }}</a></p>
-          <p *ngIf="admin.twitter">Twitter: <a [href]="admin.twitter" target="_blank">{{ admin.twitter }}</a></p>
-          <p *ngIf="admin.tiktok">TikTok: <a [href]="admin.tiktok" target="_blank">{{ admin.tiktok }}</a></p>
+        <div class="social-icons" *ngIf="admin.facebook || admin.instagram || admin.twitter || admin.tiktok">
+          <ion-icon *ngIf="admin.facebook" name="logo-facebook" (click)="openLink(admin.facebook)" class="social-icon"></ion-icon>
+          <ion-icon *ngIf="admin.instagram" name="logo-instagram" (click)="openLink(admin.instagram)" class="social-icon"></ion-icon>
+          <ion-icon *ngIf="admin.twitter" name="logo-twitter" (click)="openLink(admin.twitter)" class="social-icon"></ion-icon>
+          <ion-icon *ngIf="admin.tiktok" name="logo-tiktok" (click)="openLink(admin.tiktok)" class="social-icon"></ion-icon>
         </div>
         <ion-button (click)="openEditModal()" fill="outline" size="small">
           <ion-icon name="create-outline" slot="start"></ion-icon>
@@ -27,6 +27,7 @@
         </ion-button>
       </div>
     </div>
+
 
     <ion-card>
       <ion-card-header>

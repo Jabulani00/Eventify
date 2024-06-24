@@ -22,6 +22,19 @@
         object-fit: cover;
       }
     }
+
+    /* Add this to the component's CSS file */
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.social-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
     
     .profile-info {
       h1 {
