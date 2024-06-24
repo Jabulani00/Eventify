@@ -91,7 +91,7 @@ export class LoginPage implements OnInit {
     const userData = userDoc.data();
 
     if (userData) {
-      if (userData['status'] === 'active') {
+      if (userData['status'] === 'Active') {
         this.auth
           .signInWithEmailAndPassword(this.email, this.password)
           .then(async (userCredential) => {
