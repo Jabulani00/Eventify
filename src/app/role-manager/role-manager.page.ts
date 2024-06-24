@@ -29,6 +29,10 @@ export class RoleManagerPage implements OnInit {
   @ViewChild('userModal') userModal!: IonModal;
   selectedUser: User | null = null;
 
+  currentImageURL: string="";
+
+  @ViewChild('imageModal') imageModal!: IonModal;
+
   users: User[] = [];
   filteredUsers: User[] = [];
   selectedRole: string = 'All';
@@ -39,9 +43,11 @@ export class RoleManagerPage implements OnInit {
   constructor(private firestore: AngularFirestore) {}
 
   ngOnInit() {
-    this.firestore.collection('users').valueChanges().subscribe((data: any[]) => {
+    this.firestore.collection('users', ref => 
+      ref.where('role', 'in', ['Host', 'Administrator'])
+    ).valueChanges().subscribe((data: any[]) => {
       this.users = data as User[];
-      this.filterUsers(); // Update filteredUsers whenever users change
+      this.filterUsers();
       this.calculateStats();
       this.updateMaxActivity();
     });
@@ -49,11 +55,16 @@ export class RoleManagerPage implements OnInit {
 
   filterUsers() {
     this.filteredUsers = this.users.filter(user => {
-      return (this.selectedRole === 'All' || user.role === this.selectedRole) &&
-             (this.selectedStatus === 'All' || user.status === this.selectedStatus);
+      return this.selectedStatus === 'All' || user.status === this.selectedStatus;
     });
-    this.sortUsersByActivity(); // Ensure filteredUsers is always sorted after filtering
-    this.updateTopUser(); // Update top user after filtering
+    this.sortUsersByActivity();
+    this.updateTopUser();
+  }
+ 
+
+  openImageModal(imageURL: string) {
+    this.currentImageURL = imageURL;
+    this.imageModal.present();
   }
 
   openUserModal(user: User) {
