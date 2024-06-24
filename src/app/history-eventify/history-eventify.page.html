@@ -1,13 +1,64 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>historyEventify</ion-title>
+<ion-header>
+  <ion-toolbar >
+    <ion-title>Event History</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">historyEventify</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="container">
+    <div class="chart-section">
+      <div class="chart-container">
+        <canvas #eventChart></canvas>
+      </div>
+
+      <div class="chart-container">
+        <canvas #userChart></canvas>
+      </div>
+    </div>
+
+    <div class="card-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Attendance Records</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Biggest: {{ eventStats.attendanceRecords.biggest }}</p>
+          <p>Smallest: {{ eventStats.attendanceRecords.smallest }}</p>
+          <p>Virtual Events: {{ eventStats.attendanceRecords.virtual }}</p>
+          <p>Physical Events: {{ eventStats.attendanceRecords.physical }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Locations</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ul>
+            <li *ngFor="let location of eventStats.locations">{{ location }}</li>
+          </ul>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Donations</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Total Donations: ${{ eventStats.donations }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>User Roles</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Attendee: {{ userStats.roles.attendee }}</p>
+          <p>Host: {{ userStats.roles.host }}</p>
+          <p>Admin: {{ userStats.roles.admin }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>

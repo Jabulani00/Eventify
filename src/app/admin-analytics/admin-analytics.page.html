@@ -1,43 +1,112 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>Event Analytics</ion-title>
+    <ion-title>Event Analytics Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Event Attendance</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #attendanceChart></canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Event Types</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #eventTypeChart></canvas>
-    </ion-card-content>
-  </ion-card>
-
   <ion-grid>
     <ion-row>
-      <ion-col size="6">
+      <ion-col size="12" size-md="6" size-lg="3">
         <ion-card class="stat-card">
           <ion-card-content>
+            <ion-icon name="calendar"></ion-icon>
             <h2>Total Events</h2>
             <p>124</p>
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size="6">
+      <ion-col size="12" size-md="6" size-lg="3">
         <ion-card class="stat-card">
           <ion-card-content>
+            <ion-icon name="people"></ion-icon>
             <h2>Total Attendees</h2>
             <p>3,567</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="stat-card">
+          <ion-card-content>
+            <ion-icon name="star"></ion-icon>
+            <h2>Avg. Rating</h2>
+            <p>4.7</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="stat-card">
+          <ion-card-content>
+            <ion-icon name="trending-up"></ion-icon>
+            <h2>Growth Rate</h2>
+            <p>12.5%</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" size-lg="8">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Event Attendance</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #attendanceChart></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-lg="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Event Types</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #eventTypeChart></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" size-lg="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Attendee Satisfaction</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #satisfactionChart></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-lg="8">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Registration Trend</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #trendChart></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Top Rated Events</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let event of topEvents">
+                <ion-label>
+                  <h2>{{event.name}}</h2>
+                  <p>Rating: {{event.rating}} | Attendees: {{event.attendees}}</p>
+                </ion-label>
+                <ion-badge slot="end" color="success">{{event.rating}}</ion-badge>
+              </ion-item>
+            </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>

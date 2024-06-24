@@ -1,6 +1,7 @@
 Charts.js
 npm install chart.js chartjs-plugin-datalabels ngx-chartjs --save
 
+
 Firebase Specific Dependencies
 npm install firebase @angular/fire --save
 
@@ -26,3 +27,5 @@ npm install @ionic-native/social-sharing --save --legacy-peer-deps
 
 
 npm install -g @angular/cli
+
+

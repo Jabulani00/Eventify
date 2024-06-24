@@ -1,26 +1,108 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar [style.background-color]="'#044a42'">
     <ion-title>Eventify Communication</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let message of messages" class="message-item">
+<ion-content [fullscreen]="true" class="ion-padding" [style.background-color]="'#f4f4f4'">
+  <ion-card>
+    <ion-item lines="none">
       <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+        <img [src]="admin.profileImage" alt="Admin profile picture">
       </ion-avatar>
       <ion-label>
-        <h2>{{ message.sender }}</h2>
-        <p>{{ message.content }}</p>
-        <ion-note>{{ message.time }}</ion-note>
+        <h1>{{ admin.name }}</h1>
+        <p>{{ admin.role }}</p>
+        <ion-button (click)="editProfile()" fill="outline" size="small">Edit Profile</ion-button>
       </ion-label>
     </ion-item>
-  </ion-list>
+    <ion-item lines="none">
+      <ion-icon name="mail-outline" slot="start" style="color: #044a42;"></ion-icon>
+      <ion-label>{{ admin.email }}</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon name="call-outline" slot="start" style="color: #044a42;"></ion-icon>
+      <ion-label>{{ admin.phone }}</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon name="calendar-outline" slot="start" style="color: #044a42;"></ion-icon>
+      <ion-label>Joined on {{ admin.joinDate }}</ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-segment value="chats" (ionChange)="segmentChanged($event)" color="dark">
+    <ion-segment-button value="chats">
+      <ion-icon name="chatbubbles-outline"></ion-icon>
+      <ion-label>Chats</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="groups">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Groups</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="calls">
+      <ion-icon name="call-outline"></ion-icon>
+      <ion-label>Calls</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="communities">
+      <ion-icon name="globe-outline"></ion-icon>
+      <ion-label>Communities</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="selectedSegment === 'chats'">
+    <ion-list>
+      <ion-item *ngFor="let message of messages" class="message-item">
+        <ion-avatar slot="start">
+          <img [src]="message.avatar">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ message.sender }}</h2>
+          <p>{{ message.content }}</p>
+          <ion-note>{{ message.time }}</ion-note>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="selectedSegment === 'groups'">
+    <ion-list>
+      <ion-item *ngFor="let group of groups" class="group-item">
+        <ion-icon name="people-outline" slot="start" style="color: #044a42;"></ion-icon>
+        <ion-label>
+          <h2>{{ group.name }}</h2>
+          <p>{{ group.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="selectedSegment === 'calls'">
+    <ion-list>
+      <ion-item *ngFor="let call of calls" class="call-item">
+        <ion-icon name="call-outline" slot="start" style="color: #044a42;"></ion-icon>
+        <ion-label>
+          <h2>{{ call.title }}</h2>
+          <p>{{ call.time }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="selectedSegment === 'communities'">
+    <ion-list>
+      <ion-item *ngFor="let community of communities" class="community-item">
+        <ion-icon name="globe-outline" slot="start" style="color: #044a42;"></ion-icon>
+        <ion-label>
+          <h2>{{ community.name }}</h2>
+          <p>{{ community.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="secondary">
-      <ion-icon name="chatbubble-ellipses"></ion-icon>
+    <ion-fab-button [style.background-color]="'#044a42'">
+      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

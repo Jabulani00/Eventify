@@ -1,13 +1,124 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>roleManager</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Role Manager Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">roleManager</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="dashboard-container">
+    <div class="filter-section">
+      <ion-segment [(ngModel)]="selectedRole" (ionChange)="filterUsers()">
+        <ion-segment-button value="All">
+          <ion-label>All Roles</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Super Admin">
+          <ion-label>Super Admin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Host Admin">
+          <ion-label>Host Admin</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      
+      <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterUsers()">
+        <ion-segment-button value="All">
+          <ion-label>All Status</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Pending">
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Approved">
+          <ion-label>Approved</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Suspended">
+          <ion-label>Suspended</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Active">
+          <ion-label>Active</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <div class="stats-section">
+      <div class="stat-card">
+        <ion-icon name="people-outline"></ion-icon>
+        <div class="stat-info">
+          <h3>Total Users</h3>
+          <p>{{users.length}}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <ion-icon name="hourglass-outline"></ion-icon>
+        <div class="stat-info">
+          <h3>Pending</h3>
+          <p>{{pendingUsersCount}}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <div class="stat-info">
+          <h3>Active</h3>
+          <p>{{activeUsersCount}}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <ion-icon name="ban-outline"></ion-icon>
+        <div class="stat-info">
+          <h3>Suspended</h3>
+          <p>{{suspendedUsersCount}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-section">
+      <div class="user-list">
+        <h2>User Management</h2>
+        <ion-list>
+          <ion-item *ngFor="let user of filteredUsers" class="user-item">
+            <ion-avatar slot="start">
+              <img [src]="'https://i.pravatar.cc/150?u=' + user.id" />
+            </ion-avatar>
+            <ion-label>
+              <h2>{{user.name}}</h2>
+              <p>{{user.email}}</p>
+              <ion-badge [color]="getBadgeColor(user.status)">{{user.status}}</ion-badge>
+              <ion-badge color="medium">{{user.role}}</ion-badge>
+            </ion-label>
+            <div class="action-buttons">
+              <ion-button *ngIf="user.status === 'Pending'" (click)="approveUser(user)" fill="clear" color="success">
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="user.status === 'Pending'" (click)="declineUser(user)" fill="clear" color="danger">
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="user.status === 'Active'" (click)="suspendUser(user)" fill="clear" color="warning">
+                <ion-icon name="ban"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="user.status === 'Suspended'" (click)="activateUser(user)" fill="clear" color="success">
+                <ion-icon name="refresh-circle"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+      
+      <div class="active-users">
+        <h2>Most Active Users</h2>
+        <ion-list>
+          <ion-item *ngFor="let user of getMostActiveUsers(); let i = index" class="active-user-item">
+            <ion-avatar slot="start">
+              <img [src]="'https://i.pravatar.cc/150?u=' + user.id" />
+            </ion-avatar>
+            <ion-label>
+              <h2>{{user.name}}</h2>
+              <p>{{user.role}}</p>
+            </ion-label>
+            <div class="activity-score">
+              <ion-progress-bar [value]="user.activityScore / 100"></ion-progress-bar>
+              <span>{{user.activityScore}}</span>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </div>
 </ion-content>

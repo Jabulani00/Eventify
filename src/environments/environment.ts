@@ -6,12 +6,12 @@
 export const environment = {
   production: false,  // Add this line
   firebaseConfig :{
-    apiKey: "AIzaSyB2NOw31AqiRAKEiwrBSZXzITVQkIVV0LA",
-    authDomain: "eventify-6b28c.firebaseapp.com",
-    projectId: "eventify-6b28c",
-    storageBucket: "eventify-6b28c.appspot.com",
-    messagingSenderId: "304764828470",
-    appId: "1:304764828470:web:bb0fae696369446273d197"
+    apiKey: "AIzaSyBbmFY_P_PqfqwrVT2bC6-13VlM42wyO8o",
+    authDomain: "interview-6e844.firebaseapp.com",
+    projectId: "interview-6e844",
+    storageBucket: "interview-6e844.appspot.com",
+    messagingSenderId: "49357532369",
+    appId: "1:49357532369:web:b1d829081b7ec313d069f0"
   }
 };
 

@@ -1,0 +1,35 @@
+ion-header::part(background) {
+    background-color: #044a42;
+  }
+  
+  ion-toolbar {
+    --background: #044a42;
+  }
+  
+  ion-segment {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  ion-segment-button {
+    --color-checked: #044a42;
+    --indicator-color: #044a42;
+    flex: 1;
+    text-align: center;
+  }
+  
+  ion-fab-button {
+    --background: #044a42;
+  }
+  
+  .event-item {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 8px;
+    --color: #000;
+  }
+  
+  ion-content {
+    --background: #f4f4f4;
+  }
+  
