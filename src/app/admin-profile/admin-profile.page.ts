@@ -78,8 +78,24 @@ export class AdminProfilePage implements OnInit {
     // Implement navigation or functionality to edit profile
   }
 
-  logout() {
-    console.log('Logout');
-    // Implement logout functionality
+  async logout() {
+    try {
+      await this.afAuth.signOut();
+      const toast = await this.toastController.create({
+        message: 'You have successfully logged out.',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
+      this.router.navigate(['/login']); // Navigate to the login page or home page after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+      const toast = await this.toastController.create({
+        message: 'Error logging out. Please try again.',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
+    }
   }
 }
