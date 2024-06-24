@@ -24,4 +24,6 @@ export class FirestoreService {
   getDocument(collectionName: string, docId: string): Observable<any> {
     return this.firestore.collection(collectionName).doc(docId).valueChanges();
   }
+
+  
 }
