@@ -76,7 +76,12 @@ export class RegisterPage implements OnInit {
           profilePictureURL, // Save the downloadable URL
           countActivity: 0, // Initialize countActivity
           status: 'Pending',
-          joinDate: registrationDate // Add the registration date
+          joinDate: registrationDate, // Add the registration date
+          bio: '',
+          facebook: '',
+          instagram: '',
+          twitter: '',
+          tiktok: ''
         };
 
         // Add user data to Firestore
