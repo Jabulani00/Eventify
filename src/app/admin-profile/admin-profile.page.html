@@ -1,14 +1,15 @@
 <ion-header [translucent]="true">
-  <ion-toolbar >
+  <ion-toolbar>
     <ion-title>Admin Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="profile-container">
+  <div class="profile-container" *ngIf="admin.name">
     <div class="profile-header">
       <div class="profile-image">
-        <img [src]="admin.profileImage" alt="Admin profile picture">
+        <!-- Ensure the image fits perfectly within its container -->
+        <img [src]="admin.profileImage" alt="Admin profile picture" class="profile-pic">
       </div>
       <div class="profile-info">
         <h1>{{ admin.name }}</h1>
