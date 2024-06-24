@@ -12,15 +12,15 @@ const routes: Routes = [
   },
   {
     path: 'welcome',
-    loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomePageModule),canActivate: [AuthGuard]
+    loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomePageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),canActivate: [AuthGuard]
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule),canActivate: [AuthGuard]
+    loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'reset',

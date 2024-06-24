@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
     private controller: NavController,
     private auth: AngularFireAuth,
     private firestore: AngularFirestore,
-    private toastController: ToastController // Inject ToastController
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {}
@@ -69,7 +69,7 @@ export class LoginPage implements OnInit {
     // Check if the user is trying to log in with the default admin credentials
     if (this.email === this.defaultAdminEmail && this.password === this.defaultAdminPassword) {
       loader.dismiss();
-      this.router.navigate(['/user-profiles']);
+      this.router.navigate(['/admin-tabs']);
       return;
     }
 
@@ -87,16 +87,21 @@ export class LoginPage implements OnInit {
     }
 
     // Since email is unique, there should be only one document in the query snapshot
-    const userData = userQuerySnapshot.docs[0].data();
+    const userDoc = userQuerySnapshot.docs[0];
+    const userData = userDoc.data();
 
     if (userData) {
       if (userData['status'] === 'active') {
         this.auth
           .signInWithEmailAndPassword(this.email, this.password)
-          .then((userCredential) => {
+          .then(async (userCredential) => {
+            // Increment the countActivity field
+            await this.incrementCountActivity(userDoc.ref);
+
+            // Navigate based on user role
+            this.navigateBasedOnRole(userData['role']);
+
             loader.dismiss();
-            const user = userCredential.user;
-            this.router.navigate(['/admin-tabs']);
           })
           .catch((error) => {
             loader.dismiss();
@@ -122,6 +127,36 @@ export class LoginPage implements OnInit {
         loader.dismiss();
         this.presentToast('You are not allowed in the system', 'danger');
       }
+    }
+  }
+
+  async incrementCountActivity(docRef: firebase.firestore.DocumentReference) {
+    try {
+      await docRef.update({
+        countActivity: firebase.firestore.FieldValue.increment(1)
+      });
+    } catch (error) {
+      console.error('Error incrementing countActivity:', error);
+      // Optionally, you can show a toast message here if the increment fails
+    }
+  }
+
+  navigateBasedOnRole(role: string) {
+    switch (role) {
+      case 'Attendee':
+        this.router.navigate(['/attendee-tabs']);
+        break;
+      case 'Host':
+        this.router.navigate(['/host-tabs']);
+        break;
+      case 'Administrator':
+        this.router.navigate(['/admin-tabs']);
+        break;
+      default:
+        console.error('Unknown role:', role);
+        this.presentToast('Error: Unknown user role', 'danger');
+        // Optionally, navigate to a default route or stay on the current page
+        break;
     }
   }
 }
