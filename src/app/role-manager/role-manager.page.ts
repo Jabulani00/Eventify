@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonModal } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 export interface User {
+  membershipID: string;
+  joinDate: string;
+  gender: string;
+  maritalStatus: string;
+  phoneNumber: string;
   uid: string;
   fullName: string;
   email: string;
@@ -19,11 +25,16 @@ export interface User {
   styleUrls: ['./role-manager.page.scss'],
 })
 export class RoleManagerPage implements OnInit {
+
+  @ViewChild('userModal') userModal!: IonModal;
+  selectedUser: User | null = null;
+
   users: User[] = [];
   filteredUsers: User[] = [];
   selectedRole: string = 'All';
   selectedStatus: string = 'All';
   maxActivity: number = 0;
+  
 
   constructor(private firestore: AngularFirestore) {}
 
@@ -45,6 +56,11 @@ export class RoleManagerPage implements OnInit {
     this.updateTopUser(); // Update top user after filtering
   }
 
+  openUserModal(user: User) {
+    this.selectedUser = user;
+    this.userModal.present();
+  }
+
   calculateStats() {
     // Calculate stats based on the filteredUsers list
     // For example:
@@ -56,7 +72,7 @@ export class RoleManagerPage implements OnInit {
     console.log('Pending:', pendingCount, 'Active:', activeCount, 'Suspended:', suspendedCount);
   }
 
-  getBadgeColor(status: string): string {
+  getBadgeColor(status: string | undefined): string {
     switch (status) {
       case 'Pending':
         return 'warning';
