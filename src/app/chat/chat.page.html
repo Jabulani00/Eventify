@@ -1,0 +1,25 @@
+<!-- src/app/chat/chat.page.html -->
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let message of messages | async">
+      <ion-label>
+        <h2>{{ message.sender }}</h2>
+        <p>{{ message.content }}</p>
+        <ion-note>{{ message.timestamp | date:'short' }}</ion-note>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-footer>
+    <ion-toolbar>
+      <ion-input [(ngModel)]="newMessage" placeholder="Type a message"></ion-input>
+      <ion-button (click)="sendMessage()">Send</ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

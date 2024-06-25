@@ -38,7 +38,11 @@ const routes: Routes = [
     path: 'admin-tabs',
     loadChildren: () => import('./admin-tabs/admin-tabs.module').then( m => m.AdminTabsPageModule),canActivate: [AuthGuard]
   },
-  { path: '**', redirectTo: 'login' }
+
+  {
+    path: 'chat/:id',
+    loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
+  }
  
  
  
