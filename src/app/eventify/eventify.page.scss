@@ -1,35 +1,121 @@
-ion-header::part(background) {
-    background-color: #044a42;
-  }
-  
-  ion-toolbar {
-    --background: #044a42;
-  }
-  
-  ion-segment {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  
-  ion-segment-button {
-    --color-checked: #044a42;
-    --indicator-color: #044a42;
-    flex: 1;
-    text-align: center;
-  }
-  
-  ion-fab-button {
-    --background: #044a42;
-  }
-  
-  .event-item {
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 8px;
-    --color: #000;
-  }
-  
-  ion-content {
+ion-content {
     --background: #f4f4f4;
   }
   
+  ion-segment {
+    margin-bottom: 20px;
+  }
+  ion-chip{
+    background-color: #044a42;
+     color: white;
+}
+  
+  .event-card {
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  
+    &:hover {
+      transform: translateY(-5px);
+    }
+  
+    ion-card-header {
+      background-color: #044a42;
+      color: white;
+      padding-bottom: 5px;
+  
+      .event-type-icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+  
+      ion-card-title {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+  
+      ion-card-subtitle {
+        color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        
+        ion-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  
+    ion-card-content {
+      padding: 16px;
+  
+      p {
+        color: #333;
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+  
+        ion-icon {
+          margin-right: 5px;
+        }
+      }
+  
+      .event-bio {
+        font-style: italic;
+      }
+  
+      ion-chip {
+        margin-top: 10px;
+      }
+    }
+  
+    ion-button {
+      --border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.8em;
+      margin-bottom: 8px;
+    }
+  }
+  
+  ion-fab-button {
+    --border-radius: 15px;
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  // Media queries for responsive design
+  @media (max-width: 576px) {
+    ion-card-header {
+      .event-type-icon {
+        font-size: 1.5em;
+      }
+  
+      ion-card-title {
+        font-size: 1em;
+      }
+    }
+  
+    ion-card-content {
+      p {
+        font-size: 0.8em;
+      }
+    }
+  
+    ion-button {
+      font-size: 0.7em;
+    }
+  }
+  
+  @media (min-width: 577px) and (max-width: 768px) {
+    ion-card-header {
+      .event-type-icon {
+        font-size: 1.8em;
+      }
+  
+      ion-card-title {
+        font-size: 1.1em;
+      }
+    }
+  }

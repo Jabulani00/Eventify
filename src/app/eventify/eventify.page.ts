@@ -7,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventifyPage implements OnInit {
   selectedSegment = 'registered';
-
   events = [
     {
       name: 'Tech Conference 2024',
@@ -47,12 +46,18 @@ export class EventifyPage implements OnInit {
   ngOnInit() {
   }
 
+  get filteredEvents() {
+    return this.events.filter(event => 
+      this.selectedSegment === 'registered' ? event.registered : event.invited
+    );
+  }
+
   segmentChanged(event: any) {
     this.selectedSegment = event.detail.value;
   }
 
   getEventTypeIcon(type: string): string {
-    return type === 'virtual' ? 'laptop-outline' : 'location-outline';
+    return type === 'virtual' ? 'laptop-outline' : 'business-outline';
   }
 
   viewMap(latitude: number, longitude: number) {

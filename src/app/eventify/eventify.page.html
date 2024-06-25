@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
-  <ion-toolbar [style.background-color]="'#044a42'">
-    <ion-title>Eventify</ion-title>
+  <ion-toolbar [style.--background]="'#044a42'">
+    <ion-title color="light">Eventify</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" [style.background-color]="'#f4f4f4'">
-  <ion-segment value="registered" (ionChange)="segmentChanged($event)" color="dark">
+<ion-content [fullscreen]="true" class="ion-padding" [style.--background]="'#f4f4f4'">
+  <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)" color="dark">
     <ion-segment-button value="registered">
-      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <ion-icon name="calendar-outline"></ion-icon>
       <ion-label>Registered</ion-label>
     </ion-segment-button>
     <ion-segment-button value="invited">
@@ -16,40 +16,70 @@
     </ion-segment-button>
   </ion-segment>
 
-  <ng-container *ngIf="selectedSegment === 'registered'">
-    <ion-list>
-      <ng-container *ngFor="let event of events">
-        <ion-item *ngIf="event.registered" class="event-item">
-          <ion-icon [name]="getEventTypeIcon(event.type)" slot="start" style="color: #044a42;"></ion-icon>
-          <ion-label>
-            <h2>{{ event.name }}</h2>
-            <p>{{ event.date }} - {{ event.location }}</p>
-            <p>{{ event.bio }}</p>
-          </ion-label>
-          <ion-button *ngIf="event.type === 'physical' && event.latitude !== undefined && event.longitude !== undefined" (click)="viewMap(event.latitude, event.longitude)" fill="outline" size="small">View Map</ion-button>
-        </ion-item>
-      </ng-container>
-    </ion-list>
-  </ng-container>
-
-  <ng-container *ngIf="selectedSegment === 'invited'">
-    <ion-list>
-      <ng-container *ngFor="let event of events">
-        <ion-item *ngIf="event.invited" class="event-item">
-          <ion-icon [name]="getEventTypeIcon(event.type)" slot="start" style="color: #044a42;"></ion-icon>
-          <ion-label>
-            <h2>{{ event.name }}</h2>
-            <p>{{ event.date }} - {{ event.location }}</p>
-            <p>{{ event.bio }}</p>
-          </ion-label>
-          <ion-button *ngIf="event.type === 'physical' && event.latitude !== undefined && event.longitude !== undefined" (click)="viewMap(event.latitude, event.longitude)" fill="outline" size="small">View Map</ion-button>
-        </ion-item>
-      </ng-container>
-    </ion-list>
-  </ng-container>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="6" size-md="4" *ngFor="let event of filteredEvents">
+        <ion-card class="event-card">
+          <ion-card-header>
+            <ion-icon [name]="getEventTypeIcon(event.type)" class="event-type-icon"></ion-icon>
+            <ion-card-title>{{ event.name }}</ion-card-title>
+            <ion-card-subtitle>
+              <ion-icon name="calendar-outline"></ion-icon> {{ event.date }}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p><ion-icon name="location-outline"></ion-icon> {{ event.location }}</p>
+            <p class="event-bio">{{ event.bio }}</p>
+            <ion-chip [style.--background]="'#044a42'" color="light">
+              <ion-icon [name]="getEventTypeIcon(event.type)"></ion-icon>
+              <ion-label>{{ event.type }}</ion-label>
+            </ion-chip>
+          </ion-card-content>
+          <ion-row class="ion-justify-content-between ion-padding">
+            <ion-col size="12" size-sm="4" *ngIf="selectedSegment === 'registered'">
+              <ion-button expand="block" color="success">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Attend
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-sm="4" *ngIf="selectedSegment === 'registered'">
+              <ion-button expand="block" color="warning">
+                <ion-icon name="time-outline" slot="start"></ion-icon>
+                Postpone
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-sm="4" *ngIf="selectedSegment === 'registered'">
+              <ion-button expand="block" color="danger">
+                <ion-icon name="close-outline" slot="start"></ion-icon>
+                Close
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-sm="6" *ngIf="selectedSegment === 'invited'">
+              <ion-button expand="block" color="success">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Accept
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-sm="6" *ngIf="selectedSegment === 'invited'">
+              <ion-button expand="block" color="danger">
+                <ion-icon name="close-outline" slot="start"></ion-icon>
+                Decline
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-button *ngIf="event.type === 'physical' && event.latitude && event.longitude" 
+                      (click)="viewMap(event.latitude, event.longitude)" 
+                      expand="block" fill="clear" [style.--color]="'#044a42'">
+            <ion-icon name="map-outline" slot="start"></ion-icon>
+            View Map
+          </ion-button>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button [style.background-color]="'#044a42'">
+    <ion-fab-button [style.--background]="'#044a42'">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
