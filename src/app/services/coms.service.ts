@@ -1,4 +1,3 @@
-// src/app/services/coms.service.ts
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
@@ -7,7 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ComsService {
-
   constructor(private firestore: AngularFirestore) { }
 
   getMessages(): Observable<any[]> {
@@ -28,5 +26,9 @@ export class ComsService {
 
   getUsers(): Observable<any[]> {
     return this.firestore.collection('users').valueChanges();
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.firestore.collection('users', ref => ref.where('email', '==', email)).valueChanges();
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { ChatPage } from './chat/chat.page';
 
 
 
@@ -39,10 +40,7 @@ const routes: Routes = [
     loadChildren: () => import('./admin-tabs/admin-tabs.module').then( m => m.AdminTabsPageModule),canActivate: [AuthGuard]
   },
 
-  {
-    path: 'chat/:id',
-    loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
-  }
+  { path: 'chat/:email', component: ChatPage },
  
  
  

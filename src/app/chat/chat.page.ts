@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import firebase from 'firebase/compat/app'; // Import firebase
+import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
@@ -12,14 +12,14 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  userEmail: string = ''; // Initialize userEmail
-  messages: Observable<any[]> = new Observable<any[]>(); // Initialize messages
-  newMessage: string = ''; // Initialize newMessage
+  userEmail: string = '';
+  messages: Observable<any[]> = new Observable<any[]>();
+  newMessage: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private afs: AngularFirestore,
-    private afAuth: AngularFireAuth // Inject AngularFireAuth
+    private afAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class ChatPage implements OnInit {
   sendMessage() {
     if (this.newMessage.trim().length) {
       this.afs.collection('messages').add({
-        userEmail: this.userEmail, // Use userEmail instead of userId
+        userEmail: this.userEmail,
         content: this.newMessage,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });

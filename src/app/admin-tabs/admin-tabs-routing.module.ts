@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminTabsPage } from './admin-tabs.page';
+import { ComsPage } from '../coms/coms.page';
 
 const routes: Routes = [
   {
@@ -19,10 +20,7 @@ const routes: Routes = [
         path: 'adminProfile',
         loadChildren: () => import('../admin-profile/admin-profile.module').then(m => m.AdminProfilePageModule)
       },
-      {
-        path: 'coms',
-        loadChildren: () => import('../coms/coms.module').then(m => m.ComsPageModule)
-      },
+      { path: 'coms', component: ComsPage },
       {
         path: 'eventify',
         loadChildren: () => import('../eventify/eventify.module').then(m => m.EventifyPageModule)

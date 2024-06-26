@@ -1,4 +1,3 @@
-// src/app/coms/coms.page.ts
 import { Component, OnInit } from '@angular/core';
 import { ComsService } from '../services/coms.service';
 import { Router } from '@angular/router';
@@ -35,10 +34,13 @@ export class ComsPage implements OnInit {
       this.communities = communities;
     });
 
-    // Assuming you have a method to fetch the admin data
-    // this.userService.getUser('dGPFXc1pXNdkCHkEnFullxP9jmu2').subscribe(adminData => {
-    //   this.admin = adminData;
-    // });
+    // Assuming the admin email is stored in localStorage or another service
+    const adminEmail = localStorage.getItem('adminEmail');
+    if (adminEmail) {
+      this.comsService.getUserByEmail(adminEmail).subscribe(adminData => {
+        this.admin = adminData[0]; // Assuming the email query returns an array with one element
+      });
+    }
   }
 
   segmentChanged(event: any) {
@@ -54,6 +56,6 @@ export class ComsPage implements OnInit {
   }
 
   openChat(user: any) {
-    this.router.navigate(['/chat', user.uid]);
+    this.router.navigate(['/chat', user.email]);
   }
 }

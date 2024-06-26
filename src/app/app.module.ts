@@ -10,13 +10,18 @@ import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ComsPage } from './coms/coms.page';
+import { ChatPage } from './chat/chat.page';
+import { FormsModule } from '@angular/forms'; 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,  ComsPage,
+    ChatPage,],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    FormsModule, 
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule, 
   ],
