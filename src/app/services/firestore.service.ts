@@ -25,5 +25,12 @@ export class FirestoreService {
     return this.firestore.collection(collectionName).doc(docId).valueChanges();
   }
 
+  getDocumentsByCondition(collectionName: string, email: string): Observable<any[]> {
+    return this.firestore.collection(collectionName, ref => ref.where('email', '==', email)).valueChanges();
+  }
+
+
+ 
+
   
 }

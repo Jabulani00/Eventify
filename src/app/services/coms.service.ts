@@ -31,4 +31,6 @@ export class ComsService {
   getUserByEmail(email: string): Observable<any> {
     return this.firestore.collection('users', ref => ref.where('email', '==', email)).valueChanges();
   }
+
+
 }
