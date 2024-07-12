@@ -2,33 +2,50 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 
+interface UserDetails {
+  address: string;
+  bio: string;
+  countActivity: number;
+  email: string;
+  facebook: string;
+  fullName: string;
+  gender: string;
+  instagram: string;
+  joinDate: string;
+  maritalStatus: string;
+  membershipID: string;
+  phoneNumber: string;
+  profilePictureURL: string;
+  role: string;
+  status: string;
+  tiktok: string;
+  twitter: string;
+  uid: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ComsService {
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private afs: AngularFirestore) {}
 
-  getMessages(): Observable<any[]> {
-    return this.firestore.collection('messages').valueChanges();
+  getUsers(): Observable<UserDetails[]> {
+    return this.afs.collection<UserDetails>('users').valueChanges();
   }
 
   getGroups(): Observable<any[]> {
-    return this.firestore.collection('groups').valueChanges();
+    return this.afs.collection('groups').valueChanges();
   }
 
   getCalls(): Observable<any[]> {
-    return this.firestore.collection('calls').valueChanges();
+    return this.afs.collection('calls').valueChanges();
   }
 
   getCommunities(): Observable<any[]> {
-    return this.firestore.collection('communities').valueChanges();
+    return this.afs.collection('communities').valueChanges();
   }
 
-  getUsers(): Observable<any[]> {
-    return this.firestore.collection('users').valueChanges();
-  }
-
-  getUserByEmail(email: string): Observable<any> {
-    return this.firestore.collection('users', ref => ref.where('email', '==', email)).valueChanges();
+  getUserByEmail(email: string): Observable<UserDetails[]> {
+    return this.afs.collection<UserDetails>('users', ref => ref.where('email', '==', email)).valueChanges();
   }
 }
