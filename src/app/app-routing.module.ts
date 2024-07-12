@@ -40,7 +40,7 @@ const routes: Routes = [
     loadChildren: () => import('./admin-tabs/admin-tabs.module').then( m => m.AdminTabsPageModule),canActivate: [AuthGuard]
   },
 
-  { path: 'chat/:email', component: ChatPage },
+  { path: 'chat/:name', component: ChatPage },
  
  
  

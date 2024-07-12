@@ -32,11 +32,8 @@
   </ion-card>
 
   <!-- Segment Control -->
-  <ion-segment value="chats" (ionChange)="segmentChanged($event)" color="dark">
-    <ion-segment-button value="chats">
-      <ion-icon name="chatbubbles-outline"></ion-icon>
-      <ion-label>Chats</ion-label>
-    </ion-segment-button>
+  <ion-segment value="communities" (ionChange)="segmentChanged($event)" color="dark">
+ 
     <ion-segment-button value="groups">
       <ion-icon name="people-outline"></ion-icon>
       <ion-label>Groups</ion-label>
@@ -51,20 +48,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <!-- Chat List -->
-  <ng-container *ngIf="selectedSegment === 'chats'">
-    <ion-list>
-      <ion-item *ngFor="let user of users" class="message-item" (click)="openChat(user)">
-        <ion-avatar slot="start">
-          <img [src]="user.profilePictureURL">
-        </ion-avatar>
-        <ion-label>
-          <h2>{{ user.fullName }}</h2>
-          <p>{{ user.email }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ng-container>
+
 
   <!-- Group List -->
   <ng-container *ngIf="selectedSegment === 'groups'">
@@ -104,30 +88,30 @@
       </ion-item>
     </ion-list>
   </ng-container>
-  
 
-  <!-- Add New Community -->
-  <ion-card>
-    <ion-item>
-      <ion-label position="floating">Community Name</ion-label>
-      <ion-input [(ngModel)]="newCommunity.name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Description</ion-label>
-      <ion-input [(ngModel)]="newCommunity.description"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Add Users</ion-label>
-      <ion-select [(ngModel)]="newCommunity.users" multiple="true" cancelText="Cancel" okText="Add">
-        <ion-select-option *ngFor="let user of users" [value]="user.email">{{ user.fullName }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-button expand="block" (click)="createCommunity()">Create Community</ion-button>
-  </ion-card>
+<!-- Add New Community -->
+<ion-card>
+  <ion-item>
+    <ion-label position="floating">Community Name</ion-label>
+    <ion-input [(ngModel)]="newCommunity.name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Description</ion-label>
+    <ion-input [(ngModel)]="newCommunity.description"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Add Users</ion-label>
+    <ion-select [(ngModel)]="newCommunity.users" multiple="true" cancelText="Cancel" okText="Add">
+      <ion-select-option *ngFor="let user of users" [value]="user.email">{{ user.fullName }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button expand="block" (click)="createCommunity()">Create Community</ion-button>
+</ion-card>
+
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button [style.background-color]="'#044a42'">
-      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+    <ion-fab-button (click)="logout()" style="background-color: #044a42;">
+      <ion-icon name="log-out-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

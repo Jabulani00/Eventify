@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { switchMap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 interface UserDetails {
   address: string;
@@ -100,8 +101,8 @@ export class ComsPage implements OnInit {
   openChat(user: any) {
     this.router.navigate(['/chat', user.email]);
   }
+
   openCommunityChat(community: Community) {
-    // You can pass additional parameters if needed
     this.router.navigate(['/chat', community.name]);
   }
 
@@ -111,7 +112,8 @@ export class ComsPage implements OnInit {
         name: this.newCommunity.name,
         description: this.newCommunity.description,
         users: this.newCommunity.users
-      }).then(() => {
+      }).then((docRef) => {
+        this.afs.collection('communities').doc(docRef.id).collection('community_chat').add({});
         this.newCommunity = { name: '', description: '', users: [] };
       });
     }
