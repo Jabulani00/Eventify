@@ -1,13 +1,132 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>postConf</ion-title>
+    <ion-title>Create Event</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">postConf</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <form [formGroup]="eventForm" (ngSubmit)="createEvent()">
+    <ion-item>
+      <ion-label position="floating">Event Name</ion-label>
+      <ion-input formControlName="eventName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label position="floating">Date</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" presentation="date" formControlName="startTime"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Start Time</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" presentation="time" formControlName="startTime"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">End Time</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" presentation="time" formControlName="endTime"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Event Type</ion-label>
+      <ion-select formControlName="eventType">
+        <ion-select-option value="virtual">Virtual</ion-select-option>
+        <ion-select-option value="physical">Physical</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="!isVirtual">
+      <ion-label position="floating">Location</ion-label>
+      <ion-input formControlName="location"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Privacy</ion-label>
+      <ion-select formControlName="privacy">
+        <ion-select-option value="public">Public</ion-select-option>
+        <ion-select-option value="private">Private</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Invite People</ion-label>
+      <ion-select formControlName="invitees" multiple="true">
+        <ion-select-option *ngFor="let person of people | async" [value]="person"> {{ person.membershipID }}-{{  person.fullName }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Speakers</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let speaker of speakers.controls; let i = index" [formGroup]="asFormGroup(speaker)">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+
+              <ion-item>
+                <ion-label position="floating">Name</ion-label>
+                <ion-input formControlName="name"></ion-input>
+              </ion-item>
+            </ion-col>
+          <ion-col>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input formControlName="email"></ion-input>
+              </ion-item>
+
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Facebook</ion-label>
+                <ion-input formControlName="facebook"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Instagram</ion-label>
+                <ion-input formControlName="instagram"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              
+              <ion-item>
+                <ion-label position="floating">Twitter</ion-label>
+                <ion-input formControlName="twitter"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">LinkedIn</ion-label>
+                <ion-input formControlName="linkedin"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Biography</ion-label>
+                <ion-textarea formControlName="biography"></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button color="danger" (click)="removeSpeaker(i)">Remove Speaker</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="full" (click)="addSpeaker()">Add Speaker</ion-button>
+    <ion-button expand="full" type="submit" [disabled]="eventForm.invalid">Create Event</ion-button>
+  </form>
 </ion-content>

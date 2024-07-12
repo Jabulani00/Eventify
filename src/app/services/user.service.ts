@@ -36,4 +36,8 @@ export class UserService {
     const userRef = this.getUserByEmail(email);
     return userRef.update({ status: newStatus });
   }
+
+  // getUserByCondition(collectionName: string, email: string): Observable<any[]> {
+  //   return this.firestore.collection(collectionName, ref => ref.where('email', '==', email)).valueChanges();
+  // }
 }

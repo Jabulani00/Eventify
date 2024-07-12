@@ -48,4 +48,6 @@ export class ComsService {
   getUserByEmail(email: string): Observable<UserDetails[]> {
     return this.afs.collection<UserDetails>('users', ref => ref.where('email', '==', email)).valueChanges();
   }
+
+
 }
