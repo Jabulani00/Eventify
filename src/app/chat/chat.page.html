@@ -5,12 +5,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" [style.background-color]="'#f4f4f4'">
-  <ion-list>
-    <ion-item *ngFor="let message of messages">
+  <ion-list class="message-list">
+    <ion-item *ngFor="let message of messages; let i = index" [ngClass]="{'odd-message': i % 2 !== 0, 'even-message': i % 2 === 0}">
+      <ion-avatar slot="start">
+        <ion-icon name="person-circle-outline" class="message-icon"></ion-icon>
+      </ion-avatar>
       <ion-label>
-        <h2>{{ message.sender }}</h2>
-        <p>{{ message.text }}</p>
-        <p>{{ message.timestamp.toDate() | date: 'short' }}</p>
+        <div class="message-container">
+          <h2 class="message-sender">{{ message.sender }}</h2>
+          <p class="message-text">{{ message.text }}</p>
+          <p class="timestamp">{{ message.timestamp.toDate() | date: 'short' }}</p>
+        </div>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -18,9 +23,10 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-item>
-      <ion-input [(ngModel)]="newMessage" placeholder="Type a message"></ion-input>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="newMessage" placeholder="Type a message" class="input-field"></ion-input>
       <ion-button slot="end" (click)="sendMessage()" style="background-color: #044a42;">
+        <ion-icon name="send-outline"></ion-icon>
         Send
       </ion-button>
     </ion-item>
