@@ -1,13 +1,59 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>news</ion-title>
+    <ion-title>News</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">news</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="news-slider-container">
+    <div #newsSlider class="news-slider">
+      <div *ngFor="let slide of newsSlides; let i = index" class="news-slide">
+        <ion-card>
+          <img [src]="slide.image" alt="{{ slide.title }}" (error)="handleImageError($event)"/>
+          <ion-card-header>
+            <ion-card-title>{{ slide.title }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{ slide.description }}</ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="slide-nav">
+      <span *ngFor="let slide of newsSlides; let i = index" 
+            class="nav-dot" 
+            [class.active]="i === currentSlide"
+            (click)="scrollToSlide(i)">
+      </span>
+    </div>
+  </div>
+
+  <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged()">
+    <ion-segment-button value="announcements">
+      <ion-label>Announcements</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="events">
+      <ion-label>Events</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="selectedSegment">
+    <ion-list *ngSwitchCase="'announcements'">
+      <ion-item *ngFor="let announcement of announcements">
+        <ion-label>
+          <h2>{{ announcement.title }}</h2>
+          <p>{{ announcement.date | date }}</p>
+          <p>{{ announcement.content }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'events'">
+      <ion-item *ngFor="let event of events">
+        <ion-label>
+          <h2>{{ event.title }}</h2>
+          <p>{{ event.date | date }} at {{ event.time }}</p>
+          <p>{{ event.location }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

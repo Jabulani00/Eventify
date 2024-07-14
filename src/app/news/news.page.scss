@@ -1,0 +1,142 @@
+.news-slider-container {
+  position: relative;
+  overflow: hidden;
+  height: 300px; // Height to accommodate cards
+}
+
+.news-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: calc(100% * 5); // Width for 5 cards
+}
+
+.news-slide {
+  flex: 0 0 calc(100% / 5); // Width for each card
+  height: 100%;
+  padding: 10px;
+}
+
+ion-card {
+  width: 100%;
+  height: 300%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-card img {
+  height: 230px;
+  object-fit: cover;
+  width: 100%;.news-slider-container {
+  position: relative;
+  overflow: hidden;
+  height: 300px; // Height to accommodate two cards
+}
+
+.news-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: calc(100% * 3); // Width for 3 slides at a time (to accommodate transition)
+}
+
+.news-slide {
+  flex: 0 0 calc(100% / 2); // Width for each card
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+ion-card {
+  width: 100%;
+  height: 200%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-card img {
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+ion-card-header {
+  padding: 10px;
+}
+
+ion-card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ion-card-content {
+  font-size: 14px;
+  padding: 0 10px 10px;
+  flex-grow: 1; // Allow content to fill remaining space
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.slide-nav {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.nav-dot.active {
+  background-color: #ffffff;
+}
+
+}
+
+ion-card-header {
+  padding: 10px;
+}
+
+ion-card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ion-card-content {
+  font-size: 14px;
+  padding: 0 10px 10px;
+  flex-grow: 1; // Allow content to fill remaining space
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.slide-nav {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.nav-dot.active {
+  background-color: #ffffff;
+}

@@ -31,4 +31,4 @@ npm install -g @angular/cli
 
   npm install uuid --legacy-peer-deps
 
-
+npm install swiper@latest --legacy-peer-deps
