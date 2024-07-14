@@ -1,36 +1,41 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComsService {
-  constructor(private firestore: AngularFirestore) { }
 
-  getMessages(): Observable<any[]> {
-    return this.firestore.collection('messages').valueChanges();
+  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {}
+
+  getUsers(): Observable<any[]> {
+    return this.afs.collection('users').valueChanges();
   }
 
   getGroups(): Observable<any[]> {
-    return this.firestore.collection('groups').valueChanges();
+    return this.afs.collection('groups').valueChanges();
   }
 
   getCalls(): Observable<any[]> {
-    return this.firestore.collection('calls').valueChanges();
+    return this.afs.collection('calls').valueChanges();
   }
 
   getCommunities(): Observable<any[]> {
-    return this.firestore.collection('communities').valueChanges();
+    return this.afs.collection('communities').valueChanges();
   }
 
-  getUsers(): Observable<any[]> {
-    return this.firestore.collection('users').valueChanges();
+  getCommunityChats(communityName: string): Observable<any[]> {
+    return this.afs.collection('communities').doc(communityName).collection('community_chat', ref => ref.orderBy('timestamp'))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
   }
-
-  getUserByEmail(email: string): Observable<any> {
-    return this.firestore.collection('users', ref => ref.where('email', '==', email)).valueChanges();
-  }
-
-
 }

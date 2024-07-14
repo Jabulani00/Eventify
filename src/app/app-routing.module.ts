@@ -44,7 +44,7 @@ const routes: Routes = [
     loadChildren: () => import('./news/news.module').then(m => m.NewsPageModule)
   },
 
-  { path: 'chat/:email', component: ChatPage },
+  { path: 'chat/:name', component: ChatPage },
  
  
  

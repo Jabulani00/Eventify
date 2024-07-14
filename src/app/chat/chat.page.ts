@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ComsService } from '../services/coms.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
@@ -12,48 +10,53 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  userEmail: string = '';
-  messages: Observable<any[]> = new Observable<any[]>();
+  communityName: string = '';
   newMessage: string = '';
+  messages: any[] = [];
+  currentUser: any = null;
 
   constructor(
     private route: ActivatedRoute,
+    private comsService: ComsService,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
-    // Get the current user's email
+    this.communityName = this.route.snapshot.paramMap.get('name')!;
+    if (this.communityName) {
+      this.comsService.getCommunityChats(this.communityName).subscribe(messages => {
+        this.messages = messages;
+      });
+    } else {
+      console.error('Community name is not defined in the route parameters.');
+    }
+
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        this.userEmail = user.email!;
-        this.loadMessages();
+        this.currentUser = user;
+      } else {
+        console.error('User is not authenticated.');
       }
     });
   }
 
-  loadMessages() {
-    this.messages = this.afs
-      .collection('messages', ref => ref.orderBy('timestamp'))
-      .valueChanges()
-      .pipe(
-        map((messages: any[]) => messages.map(message => {
-          return {
-            ...message,
-            timestamp: message.timestamp ? (message.timestamp as firebase.firestore.Timestamp).toDate() : null
-          };
-        }).filter(message => message.timestamp)) // Filter out messages with null timestamp
-      );
-  }
-
   sendMessage() {
-    if (this.newMessage.trim().length) {
-      this.afs.collection('messages').add({
-        userEmail: this.userEmail,
-        content: this.newMessage,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      this.newMessage = '';
+    if (this.newMessage.trim().length && this.currentUser && this.communityName) {
+      const message = {
+        text: this.newMessage,
+        timestamp: new Date(),
+        sender: this.currentUser.email
+      };
+      this.afs.collection('communities').doc(this.communityName).collection('community_chat').add(message)
+        .then(() => {
+          this.newMessage = '';
+        })
+        .catch(error => {
+          console.error('Error sending message: ', error);
+        });
+    } else {
+      console.error('Message text is empty or user/community name is not defined.');
     }
   }
 }
