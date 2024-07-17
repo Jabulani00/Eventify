@@ -22,7 +22,7 @@ export interface User {
 @Component({
   selector: 'app-role-manager',
   templateUrl: './role-manager.page.html',
-  styleUrls: ['./role-manager.page.scss'],
+  styleUrls: ['./role-manager.page.scss','./role.page.scss'],
 })
 export class RoleManagerPage implements OnInit {
 

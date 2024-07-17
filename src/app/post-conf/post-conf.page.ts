@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventsService } from '../services/events.service';
-import { FirestoreService } from '../services/firestore.service';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 
@@ -31,12 +30,15 @@ export class PostConfPage implements OnInit {
       eventName: ['', Validators.required],
       description: ['', Validators.required],
       startTime: ['', Validators.required],
+      eventDate:  ['',Validators.required],
       endTime: ['', Validators.required],
       eventType: ['virtual', Validators.required],
       location: [''],
       privacy: ['public', Validators.required],
       invitees: [''],
       speakers: this.fb.array([]),
+      registered: true,
+      invited: false,
     });
 
     // Update location field validity based on event type
@@ -63,7 +65,7 @@ export class PostConfPage implements OnInit {
       instagram: [''],
       twitter: [''],
       linkedin: [''],
-      biography: ['']
+      bio: ['']
     });
     this.speakers.push(speakerForm);
   }
@@ -72,6 +74,20 @@ export class PostConfPage implements OnInit {
     this.speakers.removeAt(index);
   }
 
+
+setDate($event: any) {
+  const date = $event.detail.value.split('T')[0]; // Extract the date part
+  this.eventForm.patchValue({ eventDate: date });
+}
+setStartTime($event:any){
+  const time = $event.detail.value.split('T')[0]; // Extract the date part
+  this.eventForm.patchValue({ startTime: time });
+}
+
+setEndTime($event: any) {
+  const time = $event.detail.value.split('T')[1]; // Extract the time part
+  this.eventForm.patchValue({ endTime: time });
+}
 
   createEvent() {
     if (this.eventForm.valid) {

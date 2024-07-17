@@ -21,19 +21,25 @@
       <ion-col size="12" size-sm="6" size-md="4" *ngFor="let event of filteredEvents">
         <ion-card class="event-card">
           <ion-card-header>
-            <ion-icon [name]="getEventTypeIcon(event.type)" class="event-type-icon"></ion-icon>
-            <ion-card-title>{{ event.name }}</ion-card-title>
+            <ion-card-title color="warning">{{ event.eventName }}</ion-card-title>
+            <ion-icon [name]="getEventTypeIcon(event.eventType)" class="event-type-icon"></ion-icon>
+            <ion-card-title color="warning">{{ event.eventType }}</ion-card-title>
             <ion-card-subtitle>
-              <ion-icon name="calendar-outline"></ion-icon> {{ event.date }}
+              <ion-icon name="calendar-outline"></ion-icon> {{ event.eventDate }} T {{ event.startTime }} - {{ event.endTime }}
             </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <p><ion-icon name="location-outline"></ion-icon> {{ event.location }}</p>
-            <p class="event-bio">{{ event.bio }}</p>
+            <p class="event-bio">{{ event.description }}</p>
             <ion-chip [style.--background]="'#044a42'" color="light">
-              <ion-icon [name]="getEventTypeIcon(event.type)"></ion-icon>
-              <ion-label>{{ event.type }}</ion-label>
+              <ion-icon [name]="getEventTypeIcon(event.eventType)"></ion-icon>
+              <ion-label>{{ event.eventType }}</ion-label>
             </ion-chip>
+            <ion-list>
+              <ion-item *ngFor="let speaker of event.speakers" (click)="viewSpeakerDetails(speaker)">
+                <ion-label>{{ speaker.name }}</ion-label>
+              </ion-item>
+            </ion-list>
           </ion-card-content>
           <ion-row class="ion-justify-content-between ion-padding">
             <ion-col size="12" size-sm="4" *ngIf="selectedSegment === 'registered'">
@@ -67,8 +73,8 @@
               </ion-button>
             </ion-col>
           </ion-row>
-          <ion-button *ngIf="event.type === 'physical' && event.latitude && event.longitude" 
-                      (click)="viewMap(event.latitude, event.longitude)" 
+          <ion-button *ngIf="event.eventType === 'physical' && event.latitude && event.longitude"
+                      (click)="viewMap(event.latitude, event.longitude)"
                       expand="block" fill="clear" [style.--color]="'#044a42'">
             <ion-icon name="map-outline" slot="start"></ion-icon>
             View Map
@@ -84,3 +90,25 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+<!-- Speaker Details Modal -->
+<ion-modal [isOpen]="isSpeakerModalOpen" (ionModalDidDismiss)="closeSpeakerModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ selectedSpeaker?.name }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeSpeakerModal()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <p><strong>Email:</strong> {{ selectedSpeaker?.email }}</p>
+      <p><strong>Biography:</strong> {{ selectedSpeaker?.biography }}</p>
+      <p><strong>Facebook:</strong> {{ selectedSpeaker?.facebook }}</p>
+      <p><strong>Instagram:</strong> {{ selectedSpeaker?.instagram }}</p>
+      <p><strong>LinkedIn:</strong> {{ selectedSpeaker?.linkedin }}</p>
+      <p><strong>Twitter:</strong> {{ selectedSpeaker?.twitter }}</p>
+    </ion-content>
+  </ng-template>
+</ion-modal>
