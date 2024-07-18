@@ -103,12 +103,15 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <p><strong>Email:</strong> {{ selectedSpeaker?.email }}</p>
-      <p><strong>Biography:</strong> {{ selectedSpeaker?.biography }}</p>
-      <p><strong>Facebook:</strong> {{ selectedSpeaker?.facebook }}</p>
-      <p><strong>Instagram:</strong> {{ selectedSpeaker?.instagram }}</p>
-      <p><strong>LinkedIn:</strong> {{ selectedSpeaker?.linkedin }}</p>
-      <p><strong>Twitter:</strong> {{ selectedSpeaker?.twitter }}</p>
+      <p class="bio"><strong>Biography:</strong> {{ selectedSpeaker?.biography }}</p>
+      <div class="social-links">
+        <p><strong>Email:</strong> <a [href]="'mailto:' + selectedSpeaker?.email">{{ selectedSpeaker?.email }}</a></p>
+        <p><strong>Facebook:</strong> <a [href]="selectedSpeaker?.facebook" target="_blank">{{ selectedSpeaker?.facebook }}</a></p>
+        <p><strong>Instagram:</strong> <a [href]="selectedSpeaker?.instagram" target="_blank">{{ selectedSpeaker?.instagram }}</a></p>
+        <p><strong>LinkedIn:</strong> <a [href]="selectedSpeaker?.linkedin" target="_blank">{{ selectedSpeaker?.linkedin }}</a></p>
+        <p><strong>Twitter:</strong> <a [href]="selectedSpeaker?.twitter" target="_blank">{{ selectedSpeaker?.twitter }}</a></p>
+      </div>
     </ion-content>
   </ng-template>
 </ion-modal>
+

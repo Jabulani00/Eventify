@@ -3,8 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { EventsService } from '../services/events.service';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
-
-
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-post-conf',
@@ -13,24 +12,22 @@ import { UserService } from '../services/user.service';
 })
 export class PostConfPage implements OnInit {
 
-
-  ngOnInit() {
-    this.loadUsers();
-  }
-
-
   eventForm: FormGroup;
   isVirtual: boolean = true;
-  people :any = ['Alice', 'Bob', 'Charlie', 'David']; // Example list of people
+  people: any = ['Alice', 'Bob', 'Charlie', 'David']; // Example list of people
 
-
-
-  constructor(private authService: AuthService,private fb: FormBuilder, private eventsService: EventsService,private UsersService: UserService) {
+  constructor(
+    private authService: AuthService,
+    private firestoreService: FirestoreService,
+    private fb: FormBuilder,
+    private eventsService: EventsService,
+    private userService: UserService
+  ) {
     this.eventForm = this.fb.group({
       eventName: ['', Validators.required],
       description: ['', Validators.required],
       startTime: ['', Validators.required],
-      eventDate:  ['',Validators.required],
+      eventDate: ['', Validators.required],
       endTime: ['', Validators.required],
       eventType: ['virtual', Validators.required],
       location: [''],
@@ -41,7 +38,6 @@ export class PostConfPage implements OnInit {
       invited: false,
     });
 
-    // Update location field validity based on event type
     this.eventForm.get('eventType')?.valueChanges.subscribe(value => {
       this.isVirtual = value === 'virtual';
       if (this.isVirtual) {
@@ -51,6 +47,10 @@ export class PostConfPage implements OnInit {
       }
       this.eventForm.get('location')?.updateValueAndValidity();
     });
+  }
+
+  ngOnInit() {
+    this.loadUsers();
   }
 
   get speakers(): FormArray {
@@ -65,7 +65,7 @@ export class PostConfPage implements OnInit {
       instagram: [''],
       twitter: [''],
       linkedin: [''],
-      bio: ['']
+      biography: ['']
     });
     this.speakers.push(speakerForm);
   }
@@ -74,54 +74,64 @@ export class PostConfPage implements OnInit {
     this.speakers.removeAt(index);
   }
 
+  setDate($event: any) {
+    const date = $event.detail.value.split('T')[0]; // Extract the date part
+    this.eventForm.patchValue({ eventDate: date });
+  }
 
-setDate($event: any) {
-  const date = $event.detail.value.split('T')[0]; // Extract the date part
-  this.eventForm.patchValue({ eventDate: date });
-}
-setStartTime($event:any){
-  const time = $event.detail.value.split('T')[0]; // Extract the date part
-  this.eventForm.patchValue({ startTime: time });
-}
+  setStartTime($event: any) {
+    const time = $event.detail.value.split('T')[1]; // Extract the time part
+    this.eventForm.patchValue({ startTime: time });
+  }
 
-setEndTime($event: any) {
-  const time = $event.detail.value.split('T')[1]; // Extract the time part
-  this.eventForm.patchValue({ endTime: time });
-}
+  setEndTime($event: any) {
+    const time = $event.detail.value.split('T')[1]; // Extract the time part
+    this.eventForm.patchValue({ endTime: time });
+  }
 
   createEvent() {
-    if (this.eventForm.valid) {
+    if (true) {
+      //this.eventForm.valid
       const eventData = this.eventForm.value;
 
-      // Call service method to add event
+
       this.eventsService.addEvent(eventData)
-        .then(() => {
+        .then(async () => {
           console.log('Event Created and saved to Firestore');
-          // Optionally, navigate to a success page or perform other actions
+          try {
+            for (const speaker of eventData.speakers) {
+              if (speaker.email && speaker.name) {
+                const userCredential = await this.authService.register(speaker.email, speaker.name);
+                const uid = userCredential.user?.uid!;
+                const userData = {
+                  uid:uid,
+                  email: speaker.email,
+                  fullName:speaker.name,
+                  role:"Attendee" ,
+                  countActivity: 0, // Initialize countActivity
+                  status: 'Active',
+                };
+                console.log(`Speaker registered successfully: ${speaker.email}`);
+                await this.firestoreService.addDocumentWithId('users', uid?.toString(), userData);
+                console.log("save to firestore");
+              }
+            }
+          } catch (authError) {
+            console.error('Error registering speaker:', authError);
+          }
         })
         .catch(error => {
           console.error('Error adding event to Firestore:', error);
-          // Handle error as needed
         });
     } else {
       console.log('Form is not valid');
+      this.eventForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
     }
   }
-  
-
-  // loadUsers(): void {
-  //   this.authService.getUser().subscribe((user:any) => {
-  //     if (user) {
-  //       this.people =  this.UsersService.getUsers();
-  //       console.log( this.people)
-  //     }
-  //   });
-  // }
 
   loadUsers(): void {
-    this.people = this.UsersService.getUsers();
+    this.people = this.userService.getUsers();
   }
-  
 
   asFormGroup(control: AbstractControl): FormGroup {
     return control as FormGroup;

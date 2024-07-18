@@ -119,3 +119,67 @@ ion-content {
       }
     }
   }
+
+
+
+  ion-modal {
+    --height: 60%;
+    --width: 80%;
+    --border-radius: 20px;
+    --background: #ffffff;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  ion-header {
+    --background: #044a42;
+    --border-radius: 20px 20px 0 0;
+    ion-title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    ion-buttons {
+      ion-button {
+        color: #ffffff;
+      }
+    }
+  }
+  
+  ion-content {
+    ion-padding {
+      padding: 20px;
+      p {
+        margin-bottom: 15px;
+        font-size: 16px;
+        strong {
+          color: #044a42;
+        }
+        a {
+          color: #044a42;
+          text-decoration: none;
+        }
+      }
+    }
+  
+    .bio {
+      font-size: 16px;
+      color: #333333;
+    }
+  
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  
+      a {
+        display: inline-block;
+        color: #044a42;
+        text-decoration: none;
+        transition: color 0.3s;
+  
+        &:hover {
+          color: #027353;
+        }
+      }
+    }
+  }
+  

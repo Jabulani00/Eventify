@@ -9,11 +9,13 @@
     <ion-item>
       <ion-label position="floating">Event Name</ion-label>
       <ion-input formControlName="eventName"></ion-input>
+      <ion-note slot="error" *ngIf="eventForm.get('eventName')?.hasError('required')">Event Name is required</ion-note>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Description</ion-label>
       <ion-textarea formControlName="description"></ion-textarea>
+      <ion-note slot="error" *ngIf="eventForm.get('description')?.hasError('required')">Description is required</ion-note>
     </ion-item>
 
     <ion-item fill="outline">
@@ -21,9 +23,10 @@
       <ion-datetime-button datetime="Date"></ion-datetime-button>
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-        <ion-datetime    id="Date"  (ionChange)="setDate($event)" presentation="date"></ion-datetime>
+          <ion-datetime id="Date" (ionChange)="setDate($event)" presentation="date"></ion-datetime>
         </ng-template>
       </ion-modal>
+      <ion-note slot="error" *ngIf="eventForm.get('eventDate')?.hasError('required')">Event Date is required</ion-note>
     </ion-item>
 
     <ion-item fill="outline">
@@ -31,20 +34,21 @@
       <ion-datetime-button datetime="startTime"></ion-datetime-button>
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-        <ion-datetime displayFormat="HH:mm"   id="startTime"  (ionChange)="setStartTime($event)" presentation="time"></ion-datetime>
+          <ion-datetime id="startTime" (ionChange)="setStartTime($event)" presentation="time"></ion-datetime>
         </ng-template>
       </ion-modal>
+      <ion-note slot="error" *ngIf="eventForm.get('startTime')?.hasError('required')">Start Time is required</ion-note>
     </ion-item>
-
 
     <ion-item fill="outline">
       <ion-label>End Time</ion-label>
       <ion-datetime-button datetime="endTime"></ion-datetime-button>
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-        <ion-datetime displayFormat="HH:mm"   id="endTime"  (ionChange)="setEndTime($event)" presentation="time"></ion-datetime>
+          <ion-datetime id="endTime" (ionChange)="setEndTime($event)" presentation="time"></ion-datetime>
         </ng-template>
       </ion-modal>
+      <ion-note slot="error" *ngIf="eventForm.get('endTime')?.hasError('required')">End Time is required</ion-note>
     </ion-item>
 
     <ion-item>
@@ -58,6 +62,7 @@
     <ion-item *ngIf="!isVirtual">
       <ion-label position="floating">Location</ion-label>
       <ion-input formControlName="location"></ion-input>
+      <ion-note slot="error" *ngIf="eventForm.get('location')?.hasError('required')">Location is required for physical events</ion-note>
     </ion-item>
 
     <ion-item>
@@ -71,7 +76,7 @@
     <ion-item>
       <ion-label position="floating">Invite People</ion-label>
       <ion-select formControlName="invitees" multiple="true">
-        <ion-select-option *ngFor="let person of people | async" [value]="person"> {{ person.membershipID }}-{{  person.fullName }}</ion-select-option>
+        <ion-select-option *ngFor="let person of people | async" [value]="person"> {{ person.membershipID }}-{{ person.fullName }}</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -86,10 +91,11 @@
               <ion-item>
                 <ion-label position="floating">Name</ion-label>
                 <ion-input formControlName="name"></ion-input>
+                <ion-note slot="error" *ngIf="speaker.get('name')?.hasError('required')">Name is required</ion-note>
               </ion-item>
             </ion-col>
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12" size-md="6">
               <ion-item>
@@ -104,7 +110,7 @@
               </ion-item>
             </ion-col>
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12" size-md="6">
               <ion-item>
@@ -119,7 +125,7 @@
               </ion-item>
             </ion-col>
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12" size-md="6">
               <ion-item>
@@ -134,7 +140,7 @@
               </ion-item>
             </ion-col>
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12">
               <ion-button color="danger" expand="block" (click)="removeSpeaker(i)">Remove Speaker</ion-button>
@@ -143,8 +149,8 @@
         </ion-grid>
       </ion-item>
     </ion-list>
-    
+
     <ion-button expand="full" (click)="addSpeaker()">Add Speaker</ion-button>
-    <ion-button expand="full" type="submit" [disabled]="eventForm.invalid">Create Event</ion-button>
+    <ion-button class="create-btn" expand="full" type="submit" >Create Event</ion-button>
   </form>
 </ion-content>
