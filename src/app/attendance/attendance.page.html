@@ -1,13 +1,85 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>attendance</ion-title>
+  <ion-toolbar >
+    <ion-title>
+      <ion-icon name="calendar-outline"></ion-icon> Eventify Calendar
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">attendance</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="calendar-container">
+    <ion-grid>
+      <ion-row *ngFor="let month of months; let i = index" class="month-row">
+        <ion-col size="12" size-md="6" offset-md="3">
+          <h2 class="month-title">
+            <ion-icon name="partly-sunny-outline"></ion-icon> {{ month }} {{ currentYear }}
+          </h2>
+          <ion-grid class="calendar-grid">
+            <ion-row class="days-header">
+              <ion-col size="1" *ngFor="let day of ['S', 'M', 'T', 'W', 'T', 'F', 'S']">{{ day }}</ion-col>
+            </ion-row>
+            <ion-row *ngFor="let week of [1, 2, 3, 4, 5]" class="week-row">
+              <ion-col size="1" *ngFor="let day of [1, 2, 3, 4, 5, 6, 7]" class="day-col">
+                <button 
+                  class="calendar-day"
+                  [ngClass]="{
+                    'has-event': hasEvent(currentYear + '-' + (i + 1).toString().padStart(2, '0') + '-' + ((week - 1) * 7 + day).toString().padStart(2, '0')),
+                    'today': isToday(currentYear + '-' + (i + 1).toString().padStart(2, '0') + '-' + ((week - 1) * 7 + day).toString().padStart(2, '0'))
+                  }"
+                  (click)="openEventModal(currentYear + '-' + (i + 1).toString().padStart(2, '0') + '-' + ((week - 1) * 7 + day).toString().padStart(2, '0'))"
+                >
+                  {{ (week - 1) * 7 + day }}
+                  <ion-icon *ngIf="hasEvent(currentYear + '-' + (i + 1).toString().padStart(2, '0') + '-' + ((week - 1) * 7 + day).toString().padStart(2, '0'))" 
+                            name="star" class="event-icon"></ion-icon>
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
+
+<!-- Event Modal -->
+<ion-modal #eventModal class="event-modal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="success">
+        <ion-title>{{ selectedEvent?.name }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="eventModal.dismiss()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="event-details">
+        <h2>{{ selectedEvent?.name }}</h2>
+        <p><ion-icon name="calendar-outline"></ion-icon> <strong>Date:</strong> {{ selectedEvent?.date | date:'fullDate' }}</p>
+        <p><ion-icon name="location-outline"></ion-icon> <strong>Location:</strong> {{ selectedEvent?.location }}</p>
+        <p><ion-icon name="business-outline"></ion-icon> <strong>Type:</strong> {{ selectedEvent?.type }}</p>
+        <p><ion-icon name="information-circle-outline"></ion-icon> <strong>Information:</strong> {{ selectedEvent?.info }}</p>
+        <h3><ion-icon name="person-outline"></ion-icon> Guest Speaker</h3>
+        <p><strong>Name:</strong> {{ selectedEvent?.speaker.name }}</p>
+        <p><strong>Bio:</strong> {{ selectedEvent?.speaker.bio }}</p>
+        <ion-button expand="block" color="success" (click)="attendEvent()">
+          <ion-icon name="checkmark-circle-outline"></ion-icon> Attend Event
+        </ion-button>
+        <ion-button expand="block" color="danger" (click)="showRejectReason()">
+          <ion-icon name="close-circle-outline"></ion-icon> Reject Event
+        </ion-button>
+      </div>
+      <div *ngIf="showingRejectReason" class="reject-reason">
+        <ion-item>
+          <ion-label position="stacked">Reason for not attending</ion-label>
+          <ion-input [(ngModel)]="rejectReason" placeholder="Enter your reason"></ion-input>
+        </ion-item>
+        <ion-button expand="block" color="primary" (click)="rejectEvent()">
+          Submit Rejection
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

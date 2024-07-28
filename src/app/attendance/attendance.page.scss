@@ -1,0 +1,199 @@
+:host {
+    --primary-color: #044a42;
+    --secondary-color: #0a8c7f;
+    --accent-color: #f39c12;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --today-color: #3498db;
+  }
+  
+  ion-content {
+    --background: var(--background-color);
+  }
+  
+  ion-toolbar {
+    --background: var(--primary-color);
+    --color: #ffffff;
+  }
+  
+  .calendar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .month-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    
+    ion-icon {
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
+  }
+  
+  .calendar-grid {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .days-header {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .week-row {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .day-col {
+    padding: 0;
+  }
+  
+  .calendar-day {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  
+    &:hover {
+      background-color: rgba(4, 74, 66, 0.1);
+    }
+  
+    &.has-event {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+  
+    &.today {
+      background-color: var(--today-color);
+      color: #ffffff;
+      border-radius: 50%;
+    }
+  
+    .event-icon {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      font-size: 0.8rem;
+      color: var(--accent-color);
+    }
+  }
+  
+  .event-modal {
+    --background: var(--background-color);
+    
+    ion-toolbar {
+      --background: var(--primary-color);
+      --color: #ffffff;
+    }
+  
+    .event-details {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      h2 {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+  
+      p {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+  
+        ion-icon {
+          margin-right: 10px;
+          color: var(--secondary-color);
+        }
+      }
+  
+      ion-button {
+        margin-top: 20px;
+      }
+    }
+  }
+  
+  .reject-reason {
+    margin-top: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+  
+    ion-item {
+      --background: #ffffff;
+      --border-radius: 8px;
+      --padding-start: 10px;
+      --padding-end: 10px;
+      --padding-top: 10px;
+      --padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+  
+    ion-button {
+      margin-top: 10px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .calendar-day {
+      font-size: 0.8rem;
+    }
+  
+    .event-icon {
+      font-size: 0.7rem;
+    }
+  
+    .month-title {
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .calendar-day {
+      font-size: 0.7rem;
+    }
+  
+    .event-icon {
+      font-size: 0.6rem;
+    }
+  
+    .month-title {
+      font-size: 1rem;
+    }
+  }
+  
+  // Animations
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .calendar-day {
+    transition: transform 0.2s ease-in-out;
+  
+    &:active {
+      transform: scale(0.95);
+    }
+  }
