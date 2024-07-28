@@ -30,7 +30,7 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    
+  
     ion-icon {
       margin-right: 10px;
       font-size: 1.8rem;
@@ -42,6 +42,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
   }
   
   .days-header {
@@ -75,11 +76,13 @@
   
     &:hover {
       background-color: rgba(4, 74, 66, 0.1);
+      transform: scale(1.05);
     }
   
     &.has-event {
       font-weight: bold;
       color: var(--accent-color);
+      animation: pulse 1.5s infinite;
     }
   
     &.today {
@@ -99,7 +102,7 @@
   
   .event-modal {
     --background: var(--background-color);
-    
+  
     ion-toolbar {
       --background: var(--primary-color);
       --color: #ffffff;
@@ -110,6 +113,22 @@
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      .event-image {
+        text-align: center;
+        margin-bottom: 20px;
+  
+        img {
+          max-width: 100%;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease-in-out;
+  
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+      }
   
       h2 {
         color: var(--primary-color);
@@ -138,13 +157,7 @@
     animation: fadeIn 0.3s ease-in-out;
   
     ion-item {
-      --background: #ffffff;
-      --border-radius: 8px;
-      --padding-start: 10px;
-      --padding-end: 10px;
-      --padding-top: 10px;
-      --padding-bottom: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
   
     ion-button {
@@ -152,35 +165,6 @@
     }
   }
   
-  @media (max-width: 768px) {
-    .calendar-day {
-      font-size: 0.8rem;
-    }
-  
-    .event-icon {
-      font-size: 0.7rem;
-    }
-  
-    .month-title {
-      font-size: 1.2rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .calendar-day {
-      font-size: 0.7rem;
-    }
-  
-    .event-icon {
-      font-size: 0.6rem;
-    }
-  
-    .month-title {
-      font-size: 1rem;
-    }
-  }
-  
-  // Animations
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -190,10 +174,15 @@
     }
   }
   
-  .calendar-day {
-    transition: transform 0.2s ease-in-out;
-  
-    &:active {
-      transform: scale(0.95);
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
     }
   }
+  

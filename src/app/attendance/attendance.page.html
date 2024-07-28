@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar >
+  <ion-toolbar>
     <ion-title>
       <ion-icon name="calendar-outline"></ion-icon> Eventify Calendar
     </ion-title>
@@ -56,6 +56,9 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div class="event-details">
+        <div class="event-image">
+          <img [src]="selectedEvent?.type === 'Virtual' ? 'assets/virual-event.jpg' : 'assets/physical-event.jpg'" alt="Event Image">
+        </div>
         <h2>{{ selectedEvent?.name }}</h2>
         <p><ion-icon name="calendar-outline"></ion-icon> <strong>Date:</strong> {{ selectedEvent?.date | date:'fullDate' }}</p>
         <p><ion-icon name="location-outline"></ion-icon> <strong>Location:</strong> {{ selectedEvent?.location }}</p>
